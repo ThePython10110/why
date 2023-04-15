@@ -145,3 +145,6 @@ for i, meat in ipairs(meat_types) do
 end
 
 mcl_hunger.register_food("meat_blocks:raw_block_chicken", 9, "", 30, 0, 100, 30)
+minetest.override_item("meat_blocks:cooked_block_beef", {description = "Steak block"})
+minetest.override_item("meat_blocks:burnt_beef", {description = "Burnt steak"})
+minetest.override_item("meat_blocks:burnt_block_beef", {description = "Burnt steak block"})
