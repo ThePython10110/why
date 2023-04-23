@@ -80,12 +80,12 @@ You can craft an elytra with meat blocks. Just put diamond blocks in the corners
 
 <details><summary><h2>Screenshots</h2></summary>
 
-![Zoomed Items](screenshots/Zoomed%20Items.png)
-![Items](screenshots/Items.png)
-![Sound Machine](screenshots/Sound%20Machine.png)
-![Sunflowers](screenshots/Sunflowers.png)
-![Useless Beans near Beanified Village](screenshots/Useless%20bean%20near%20beanified%20village.png)
-![Beanified Village](screenshots/Beanified%20Village.png)
-![Uselessness of useless bean liquid](screenshots/Uselessness%20of%20useless%20bean%20liquid.png)
+![Zoomed Items](textures/Zoomed%20Items.png)
+![Items](textures/Items.png)
+![Sound Machine](textures/Sound%20Machine.png)
+![Sunflowers](textures/Sunflowers.png)
+![Useless Beans near Beanified Village](textures/Useless%20bean%20near%20beanified%20village.png)
+![Beanified Village](textures/Beanified%20Village.png)
+![Uselessness of useless bean liquid](textures/Uselessness%20of%20useless%20bean%20liquid.png)
 
 </details>
