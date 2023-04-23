@@ -66,7 +66,7 @@ A few of small additions: glowing sunflowers, bouncy wool, and craftable barrier
 Adds an item that can create any sound in the game (with a few buttons for presets). It can be crafted by placing jukeboxes in a 2x2 square.
 
 ### Sticky Things
-Adds glue and sticky blocks, which slow down players. Craft glue by combining wheat seeds and water (a quick Google search said that one common recipe for glue was flour and water, and wheat seeds was the best alternative I could think of, though now that I think of it, maybe I should use `group:flower`). Craft sticky blocks mixing soul sand and ice.
+Adds glue and sticky blocks, which slow down players. Craft glue by combining a flower with water (a quick Google search said that one common recipe for glue was flour and water, and... pun). Craft sticky blocks mixing soul sand and ice.
 
 ### Useless Beans
 Beans... that are useless. They can be found in desert and mesa biomes. Annoy everyone by filling their inventories with useless beans! For added irritation, you can put one useless bean into a crafting table and get 64. Craft useless bean tools, smelt them into beangots (useless bean ingots), flood the world with useless bean liquid, and more!

@@ -102,7 +102,7 @@ mcl_buckets.register_liquid({
 minetest.register_craft({
     output = "sticky_things:bucket_glue",
     type = "shapeless",
-    recipe = {"mcl_farming:wheat_seeds", "mcl_buckets:bucket_water"},
+    recipe = {"group:flower", "mcl_buckets:bucket_water"},
     replacements = {{"mcl_buckets:bucket_water", "mcl_buckets:bucket_empty"}}
 })
 
