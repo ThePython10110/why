@@ -74,6 +74,7 @@ function ghost_blocks.register_ghost_block(block)
         block_data.description = "Ghost "..block_data.description
     end
     block_data.groups.ghost_block = 1
+    block_data.groups.not_in_creative_inventory = 1
     block_data.groups.not_in_craft_guide = 1
     block_data.drop = new_name
 	block_data._mcl_silk_touch_drop = {new_name}
@@ -252,9 +253,9 @@ minetest.register_node("ghost_blocks:ghostifier", {
 minetest.register_craft({
     output = "ghost_blocks:ghostifier",
     recipe = {
-        {"mcl_mobitems:ghast_tear", "mcl_mobitems:ghast_tear", "mcl_mobitems:ghast_tear"},
-        {"mcl_mobitems:ghast_tear", "mcl_core:glass", "mcl_mobitems:ghast_tear"},
-        {"mcl_mobitems:ghast_tear", "mcl_mobitems:ghast_tear", "mcl_mobitems:ghast_tear"}
+        {"mcl_core:glass", "mcl_core:glass", "mcl_core:glass"},
+        {"mcl_core:glass", "mcl_mobitems:ghast_tear", "mcl_core:glass"},
+        {"mcl_core:glass", "mcl_core:glass", "mcl_core:glass"}
     }
 })
 

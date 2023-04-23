@@ -13,7 +13,7 @@ minetest.register_node("useless_beans:useless_bean", {
 
 minetest.register_decoration({
     deco_type = "simple",
-    place_on = {"group:sand"},
+    place_on = {"group:sand", "group:soil", "mcl_mud:mud"},
     sidelen = 16,
     noise_params = {
         offset = 0.0,
@@ -35,6 +35,15 @@ minetest.register_decoration({
         "MesaPlateauF_sandlevel",
         "MesaPlateauFM",
         "MesaPlateauFM_sandlevel",
+        "BambooJungleEdge",
+        "MangroveSwamp",
+        "Jungle",
+        "JungleEdge",
+        "BambooJungle",
+        "BambooJungleM",
+        "JungleEdgeM",
+        "JungleM",
+        "BambooJungleEdgeM"
     },
     decoration = "useless_beans:useless_bean",
     height = 1,
