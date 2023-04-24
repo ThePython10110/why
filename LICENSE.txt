@@ -1,0 +1,9 @@
+Licenses/attribution
+All code in this modpack is licensed under GPLv3+.
+All burnt meat textures, besides the meat blocks and sausage, are modified versions of MineClone meat textures.
+The glue bucket and useless bean liquid bucket textures are modified versions of MineClone's water bucket.
+All other textures in the modpack are completely my own. All textures (my own and MineClone's) are licensed under CC BY-SA 3.0.
+
+Links to licenses:
+GPLv3: https://www.gnu.org/licenses/gpl-3.0.en.html
+CC BY-SA 3.0: https://creativecommons.org/licenses/by-sa/3.0/legalcode
