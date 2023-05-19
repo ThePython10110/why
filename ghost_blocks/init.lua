@@ -8,6 +8,7 @@ ghost_blocks.block_list = {
 }
 
 ghost_blocks.group_list = {
+    "solid",
     "wood",
     "tree",
     "slab_wood",
@@ -35,7 +36,8 @@ ghost_blocks.group_list = {
     "shovely",
     "handy",
     "hoey",
-    "swordy"
+    "swordy",
+    "solid_liquid"
 }
 
 ghost_blocks.block_map = {}

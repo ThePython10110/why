@@ -1,0 +1,29 @@
+1.0.0
+    Initial release.
+1.0.1
+    Fixed to satisfy release requirements.
+2.0
+    Added a changelog.
+    Changed version numbers to x.x instead of x.x.x.
+    Sound Machine:
+        Added pitch controls.
+        Added a "Sound Machine" block (basically a sound machine that acts like a note block).
+        Renamed the original Sound Machine to "Portable Sound Machine."
+        The Sound Machine and the portable version can be crafted from each other.
+        Changed the crafting recipe of the Sound Machine to black concrete surrounded by copper ingots (copper needs more uses).
+    Fake Liquids:
+        Solid liquids do not take nearly as long to break (for some reason I made it as long as obsidian).
+        Any solid liquid with "group:lava" will set players on fire and damage them.
+            Mobs are not damaged by solid liquids unless inside them (would require MineClone change),
+            but ghost solid liquids work.
+        Solid liquid blocks (including ghost versions) are now closer to actual liquid blocks (swimming, drowning, etc.)
+        Solid liquid blocks are automatically registered (depends on dependencies and mod load order).
+        Solid liquid blocks now interact to produce cobble/stone/obsidian.
+        Added Fake Lava and Fake Water, which look identical to lava and water but their functions are reversed.
+            They are created by brewing water/river water or lava buckets with a fermented spider eye.
+        Any fake liquid with "group:water" will evaporate in the Nether (assuming you use the bucket).
+    Ghost Blocks:
+        Solid liquids are now ghostifiable.
+    Slime Things:
+        Inner stairs are now bouncy/transparent (I just completely forgot about them)
+        Upper/double slabs and inner/outer stairs no longer appear in the creative inventory

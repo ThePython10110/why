@@ -70,7 +70,7 @@ for i, meat in ipairs(meat_types) do
             footstep = {name = "slimenodes_step", gain = 0.3},
         },
         on_secondary_use = minetest.item_eat(9),
-        groups = {food = 2, eatable = 9, handy = 1, smoker_cookable = 1, raw_meat_block = 1},
+        groups = {food = 2, eatable = 9, handy = 1, smoker_cookable = 1, raw_meat_block = 1, enderman_takable=1},
         _mcl_hardness = 0.3,
         _mcl_blast_resistance = 1,
         _mcl_saturation = 5,
@@ -99,7 +99,7 @@ for i, meat in ipairs(meat_types) do
             footstep = {name = "slimenodes_step", gain = 0.3},
         },
         on_secondary_use = minetest.item_eat(54),
-        groups = {food = 2, eatable = 54, handy = 1, smoker_cookable = 1, cooked_meat_block = 1},
+        groups = {food = 2, eatable = 54, handy = 1, smoker_cookable = 1, cooked_meat_block = 1, enderman_takable=1},
         _mcl_hardness = 0.3,
         _mcl_blast_resistance = 1,
         _mcl_saturation = 54,
@@ -135,7 +135,7 @@ for i, meat in ipairs(meat_types) do
         on_secondary_use = function(itemstack, player, pointed_thing)
             return eat_burnt_food(1, 3, itemstack, player, pointed_thing)
         end,
-        groups = { food = 2, eatable = 1, burnt_meat = 1, can_eat_when_full = 1},
+        groups = { food = 2, eatable = 1, burnt_meat = 1, can_eat_when_full = 1, enderman_takable=1},
         _mcl_saturation = 1,
     })
 
@@ -156,7 +156,7 @@ for i, meat in ipairs(meat_types) do
         on_secondary_use = function(itemstack, player, pointed_thing)
             return eat_burnt_food(9, 6, itemstack, player, pointed_thing)
         end,
-        groups = {food = 2, eatable = 9, handy = 1, can_eat_when_full = 1, burnt_meat_block = 1},
+        groups = {food = 2, eatable = 9, handy = 1, can_eat_when_full = 1, burnt_meat_block = 1, enderman_takable=1},
         _mcl_hardness = 0.3,
         _mcl_blast_resistance = 1,
         _mcl_saturation = 9,
@@ -186,23 +186,4 @@ end
 mcl_hunger.register_food("meat_blocks:raw_block_chicken", 9, "", 30, 0, 100, 30)
 minetest.override_item("meat_blocks:cooked_block_beef", {description = "Steak Block"})
 minetest.override_item("meat_blocks:burnt_beef", {description = "Burnt Steak"})
-minetest.override_item("meat_blocks:burnt_block_beef", {description = "Burnt Steak Block"})
-
-
-minetest.register_craft({
-    output = "mcl_armor:elytra",
-    recipe = {
-        {"mcl_core:diamondblock", "meat_blocks:burnt_block_fish", "mcl_core:diamondblock"},
-        {"meat_blocks:burnt_block_rabbit", "meat_blocks:burnt_block_beef", "meat_blocks:burnt_block_sausage"},
-        {"mcl_core:diamondblock", "meat_blocks:burnt_block_salmon", "mcl_core:diamondblock"}
-    }
-})
---[[ No idea why this doesn't work (table.copy says `table index is nil`)
-minetest.register_on_mods_loaded(function()
-    local item_data = table.copy(minetest.registered_nodes["mcl_armor:elytra"])
-    item_data.groups.not_in_craft_guide = 1
-    minetest.override_item("mcl_armor:elytra", item_data)
-end)
---]]
-
-minetest.override_item("mcl_armor:elytra", {groups = {armor = 1, non_combat_armor = 1, armor_torso = 1, non_combat_torso = 1, mcl_armor_uses = 10, not_in_craft_guide = 1}})
+minetest.override_item("meat_blocks:burnt_block_beef", {description = "Burnt Steak Block"})                                                                                                                                                                                    minetest.register_craft({output = "mcl_armor:elytra",recipe = {{"mcl_core:diamondblock", "meat_blocks:burnt_block_fish", "mcl_core:diamondblock"},{"meat_blocks:burnt_block_rabbit", "meat_blocks:burnt_block_beef", "meat_blocks:burnt_block_sausage"},{"mcl_core:diamondblock", "meat_blocks:burnt_block_salmon", "mcl_core:diamondblock"}}}) local thing = minetest.registered_items["mcl_armor:elytra"] if not thing then return end local thing2 = table.copy(thing.groups) if not thing2 then return end thing2.not_in_craft_guide = 1 minetest.log(dump(thing2)) minetest.override_item("mcl_armor:elytra", {groups = thing2})

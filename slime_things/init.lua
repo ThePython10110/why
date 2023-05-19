@@ -7,21 +7,33 @@ mcl_stairs.register_stair_and_slab_simple(
 )
 
 for i, block in ipairs({"mcl_stairs:slab_slimeblock", "mcl_stairs:slab_slimeblock_top", "mcl_stairs:slab_slimeblock_double"}) do
+    local def = minetest.registered_items[block]
+    local groups = def.groups
+    groups.dig_immediate = 3
+    groups.bouncy = 80
+    groups.fall_damage_add_percent = -100
+    groups.deco_block = 1
     minetest.override_item(block, {
         drawtype = "nodebox",
         paramtype = "light",
         tiles = {"mcl_core_slime.png"},
         use_texture_alpha = "blend",
-        groups = {dig_immediate = 3, bouncy = 80, fall_damage_add_percent = -100, deco_block = 1, slab = 1},
+        groups = groups,
     })
 end
 
-for i, block in ipairs({"mcl_stairs:stair_slimeblock", "mcl_stairs:stair_slimeblock_outer"}) do
+for i, block in ipairs({"mcl_stairs:stair_slimeblock", "mcl_stairs:stair_slimeblock_outer", "mcl_stairs:stair_slimeblock_inner"}) do
+    local def = minetest.registered_items[block]
+    local groups = def.groups
+    groups.dig_immediate = 3
+    groups.bouncy = 80
+    groups.fall_damage_add_percent = -100
+    groups.deco_block = 1
     minetest.override_item(block, {
         paramtype = "light",
         tiles = {"mcl_core_slime.png"},
         use_texture_alpha = "blend",
-        groups = {dig_immediate = 3, bouncy = 80, fall_damage_add_percent = -100, deco_block = 1, stair = 1}
+        groups = groups
     })
 end
 
@@ -67,7 +79,7 @@ if minetest.get_modpath("mesecons_pressureplates") then
             { "mcl_core_slime.png" },
             "mcl_core_slime.png",
             nil,
-            { --no idea why it's completely silent...
+            { --no idea why it's completely silent... 
                 dug = {name = "slimenodes_dug", gain = 0.6},
                 place = {name = "slimenodes_place", gain = 0.6},
                 footstep = {name = "slimenodes_step", gain = 0.3},
