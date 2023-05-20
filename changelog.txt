@@ -27,3 +27,5 @@
     Slime Things:
         Inner stairs are now bouncy/transparent (I just completely forgot about them)
         Upper/double slabs and inner/outer stairs no longer appear in the creative inventory
+2.1
+    Added "group:useless" to all useless bean items.

@@ -81,6 +81,7 @@ minetest.register_craftitem("useless_beans:useless_bean_ingot", {
     description = "Beangot (Useless Bean Ingot)",
 	inventory_image = "useless_beans_useless_bean_ingot.png",
 	wield_image = "useless_beans_useless_bean_ingot.png",
+    groups = {useless = 1,}
 })
 
 minetest.register_craft({
@@ -195,7 +196,7 @@ minetest.register_node("useless_beans:useless_bean_liquid_flowing", {
 	liquid_range = 7,
 	waving = 3,
 	post_effect_color = {a=60, r=24.7, g=89.4, b=60},
-	groups = {water = 3, liquid=3, puts_out_fire=1, not_in_creative_inventory=1, melt_around=1, dig_by_piston=1},
+	groups = {useless = 1, water = 3, liquid=3, puts_out_fire=1, not_in_creative_inventory=1, melt_around=1, dig_by_piston=1},
 	_mcl_blast_resistance = 100,
 	-- Hardness intentionally set to infinite instead of 100 (Minecraft value) to avoid problems in creative mode
 	_mcl_hardness = -1,
@@ -243,7 +244,7 @@ minetest.register_node("useless_beans:useless_bean_liquid_source", {
 	liquid_range = 7,
 	post_effect_color = {a=60, r=24.7, g=89.4, b=60},
 	stack_max = 64,
-	groups = {water = 3, liquid=3, puts_out_fire=1, not_in_creative_inventory=1, melt_around=1, dig_by_piston=1},
+	groups = {useless = 1, water = 3, liquid=3, puts_out_fire=1, not_in_creative_inventory=1, melt_around=1, dig_by_piston=1},
 	_mcl_blast_resistance = 100,
 	-- Hardness intentionally set to infinite instead of 100 (Minecraft value) to avoid problems in creative mode
 	_mcl_hardness = -1,
@@ -277,6 +278,7 @@ for name, long_name in pairs({pick = "Pickaxe", axe = "Axe", hoe = "Hoe", sword 
         on_place = function() end,
         inventory_image = "useless_beans_"..name.."_useless_bean.png",
         wield_image = "useless_beans_"..name.."_useless_bean.png",
+        groups = {useless = 1}
     })
 end
 
