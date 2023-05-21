@@ -12,6 +12,7 @@
         The Sound Machine and the portable version can be crafted from each other.
         Changed the crafting recipe of the Sound Machine to black concrete surrounded by copper ingots (copper needs more uses).
     Fake Liquids:
+        Solid liquid recipes now return the bucket.
         Solid liquids do not take nearly as long to break (for some reason I made it as long as obsidian).
         Any solid liquid with "group:lava" will set players on fire and damage them.
             Mobs are not damaged by solid liquids unless inside them (would require MineClone change),
@@ -28,4 +29,8 @@
         Inner stairs are now bouncy/transparent (I just completely forgot about them)
         Upper/double slabs and inner/outer stairs no longer appear in the creative inventory
 2.1
-    Added "group:useless" to all useless bean items.
+    Useless Beans:
+        Added "group:useless" to all useless bean items.
+2.2
+    Sticky Things:
+        Glue bucket recipe no longer returns bucket.

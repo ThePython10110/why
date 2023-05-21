@@ -50,6 +50,13 @@ local function show_sound_machine_formspec(pos, node, clicker)
     minetest.show_formspec(clicker:get_player_name(), "sound_machine_sound_machine", formspec)
 end
 
+local function sound_machine_play(pos)
+    local last_sound = minetest.get_meta(pos):get_string("sound_machine_last_sound")
+    minetest.log(last_sound)
+    local pitch = minetest.get_meta(pos):get_string("sound_machine_pitch") or 1.0
+    minetest.sound_play({name = last_sound, pitch = pitch}, { pos = pos, max_hear_distance = 20})
+end
+
 minetest.register_tool("sound_machine:portable_sound_machine", {
     description = "Portable Sound Machine",
     on_place = show_portable_formspec,
@@ -72,12 +79,12 @@ minetest.register_node("sound_machine:sound_machine", {
 		show_sound_machine_formspec(pos, node, clicker)
 	end,
 	on_punch = function(pos, node) -- play current sound when punched
-		minetest.sound_play(minetest.get_meta(pos):get_string("sound_machine_last_sound"))
+		sound_machine_play(pos)
 	end,
 	sounds = mcl_sounds.node_sound_wood_defaults(),
 	mesecons = {effector = { -- play sound when activated
 		action_on = function(pos, node)
-			minetest.sound_play(minetest.get_meta(pos):get_string("sound_machine_last_sound"))
+			sound_machine_play(pos)
 		end,
 		rules = {{x= 1, y= 0,  z= 0},
         {x=-1, y= 0,  z= 0},
@@ -117,34 +124,36 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
             end
         end
     elseif formname == "sound_machine_sound_machine" then
-        if fields.quit then return end
+        if fields.quit then
+            sound_machine_context[player:get_player_name()] = nil
+            return
+        end
 
         if sound_machine_context[player:get_player_name()] then
             local pos = sound_machine_context[player:get_player_name()]
 
-            if (fields.key_enter_field == "pitch" or fields.pitch_button) and fields.pitch then
+            if (fields.key_enter_field == "pitch" or fields.pitch_button) then
                 if tonumber(fields.pitch) then
-                    minetest.get_meta(pos):set_string("sound_machine_pitch", fields.pitch)
+                    minetest.get_meta(pos):set_string("sound_machine_pitch", fields.pitch or 1)
                 end
             end
 
-            if (fields.key_enter_field == "custom_sound" or fields.custom_sound_button) and fields.custom_sound then
-                local pitch = tonumber(minetest.get_meta(pos):get_string("sound_machine_pitch"))
-                minetest.sound_play({name = fields.custom_sound, pitch = pitch}, {pos = pos, max_hear_distance = 20})
-                minetest.get_meta(pos):set_string("sound_machine_last_sound", fields.custom_sound)
+            if (fields.key_enter_field == "custom_sound" or fields.custom_sound_button) then
+                if fields.custom_sound then
+                    minetest.get_meta(pos):set_string("sound_machine_last_sound", fields.custom_sound)
+                end
+                sound_machine_play(pos)
             end
             for field, data in pairs(fields) do
                 local _, _, row, column = string.find(field, "^(%d+)_(%d+)$")
                 if row and column then
                     local sound_data = sound_machine_buttons[tonumber(row)][tonumber(column)]
                     local pitch = tonumber(minetest.get_meta(pos):get_string("sound_machine_pitch"))
-                    minetest.log(pitch)
-                    minetest.sound_play({name = sound_data.sound, gain = sound_data.gain, pitch = pitch}, { pos = pos, max_hear_distance = 20})
                     minetest.get_meta(pos):set_string("sound_machine_last_sound", sound_data.sound)
+                    sound_machine_play(pos)
                     return
                 end
             end
-            sound_machine_context[player:get_player_name()] = nil
         end
     end
 end)
