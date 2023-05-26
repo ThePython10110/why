@@ -34,3 +34,6 @@
 2.2
     Sticky Things:
         Glue bucket recipe no longer returns bucket.
+2.3
+    Useless Beans:
+        Added Useless Bean Armor.

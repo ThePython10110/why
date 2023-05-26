@@ -268,7 +268,75 @@ minetest.register_craft({
     recipe = {"useless_beans:useless_bean", "mcl_buckets:bucket_water"}
 })
 
----------------------USELESS BEAN TOOLS------------------------
+---------------------USELESS BEAN TOOLS/ARMOR------------------------
+
+mcl_armor.register_set({
+    name = "useless_bean",
+    description = "Useless Bean",
+    durability = 0,
+    points = {
+        head = 0,
+        torso = 0,
+        legs = 0,
+        feet = 0,
+    },
+    toughness = 0,
+    groups = {useless = 1},
+    craft_material = "useless_beans:useless_bean",
+    cook_material = "useless_beans:useless_bean_ingot_block",
+    repair_material = "useless_beans:useless_bean"
+})
+
+local bean_hud = {}
+local function add_bean_hud(player)
+    bean_hud[player] = {
+        bean_blur = player:hud_add({
+            hud_elem_type = "image",
+            position = {x = 0.5, y = 0.5},
+            scale = {x = -101, y = -101},
+            text = "useless_beans_useless_bean_helmet_vision.png",
+            z_index = -200
+        }),
+        --this is a fake crosshair, because hotbar and crosshair doesn't support z_index
+        --TODO: remove this and add correct z_index values
+        fake_crosshair = player:hud_add({
+            hud_elem_type = "image",
+            position = {x = 0.5, y = 0.5},
+            scale = {x = 1, y = 1},
+            text = "crosshair.png",
+            z_index = -100
+        })
+    }
+end
+local function remove_bean_hud(player)
+    if bean_hud[player] then
+        player:hud_remove(bean_hud[player].bean_blur)
+        player:hud_remove(bean_hud[player].fake_crosshair)
+        bean_hud[player] = nil
+    end
+end
+
+local bean_face_base_def = {}
+
+bean_face_base_def.on_secondary_use = mcl_armor.equip_on_use
+bean_face_base_def._on_equip = add_bean_hud
+bean_face_base_def._on_unequip = remove_bean_hud
+
+minetest.override_item("useless_beans:helmet_useless_bean", bean_face_base_def)
+
+minetest.register_on_joinplayer(function(player)
+    if player:get_inventory():get_stack("armor", 2):get_name() == "useless_beans:helmet_useless_bean" then
+        add_bean_hud(player)
+    end
+end)
+minetest.register_on_dieplayer(function(player)
+    if not minetest.settings:get_bool("mcl_keepInventory") then
+        remove_bean_hud(player)
+    end
+end)
+minetest.register_on_leaveplayer(function(player)
+    bean_hud[player] = nil
+end)
 
 for name, long_name in pairs({pick = "Pickaxe", axe = "Axe", hoe = "Hoe", sword = "Sword", shovel = "Shovel"}) do
     minetest.register_tool("useless_beans:"..name.."_useless_bean", {
