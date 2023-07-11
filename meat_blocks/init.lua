@@ -1,3 +1,11 @@
+if why.mineclone then
+
+
+
+
+
+local meatball_rain_amount = minetest.settings:get("meat_blocks_meatball_rain_amount") or 1
+
 local function eat_burnt_food(hunger_restore, fire_time, itemstack, player, pointed_thing)
     if not player:get_player_control().sneak then 
         local new_stack = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
@@ -10,6 +18,39 @@ local function eat_burnt_food(hunger_restore, fire_time, itemstack, player, poin
     return burnt_food_hunger_restore(itemstack, player, pointed_thing)
 end
 
+minetest.register_craftitem("meat_blocks:meatball", {
+    description = "Raw Meatball",
+    inventory_image = "meat_blocks_meatball.png",
+    wield_image = "meat_blocks_meatball.png",
+    on_place = minetest.item_eat(3),
+    on_secondary_use = minetest.item_eat(3),
+    groups = { food = 2, eatable = 3},
+    _mcl_saturation = 1.8,
+})
+
+minetest.register_craftitem("meat_blocks:cooked_meatball", {
+    description = "Cooked Meatball",
+    inventory_image = "meat_blocks_meatball_cooked.png",
+    wield_image = "meat_blocks_meatball_cooked.png",
+    on_place = minetest.item_eat(8),
+    on_secondary_use = minetest.item_eat(8),
+    groups = { food = 2, eatable = 8},
+    _mcl_saturation = 12.8,
+})
+
+minetest.register_craft({
+    output = "meat_blocks:cooked_meatball",
+    type = "cooking",
+    time = 10,
+    recipe = "meat_blocks:meatball"
+})
+
+minetest.register_craft({
+    output = "meat_blocks:sausage 3",
+    type = "shapeless",
+    recipe = {"mcl_mobitems:beef", "mcl_mobitems:beef", "meat_blocks:meatball"}
+})
+
 minetest.register_craftitem("meat_blocks:sausage", {
     description = "Raw Sausage",
     inventory_image = "meat_blocks_sausage.png",
@@ -18,12 +59,6 @@ minetest.register_craftitem("meat_blocks:sausage", {
     on_secondary_use = minetest.item_eat(3),
     groups = { food = 2, eatable = 3},
     _mcl_saturation = 1.8,
-})
-
-minetest.register_craft({
-    output = "meat_blocks:sausage 3",
-    type = "shapeless",
-    recipe = {"mcl_mobitems:beef", "mcl_mobitems:beef", "mcl_mobitems:porkchop"}
 })
 
 minetest.register_craftitem("meat_blocks:cooked_sausage", {
@@ -49,8 +84,10 @@ minetest.register_alias("mcl_mobitems:cooked_fish", "mcl_fishing:fish_cooked")
 minetest.register_alias("mcl_mobitems:cooked_salmon", "mcl_fishing:salmon_cooked")
 minetest.register_alias("mcl_mobitems:sausage", "meat_blocks:sausage")
 minetest.register_alias("mcl_mobitems:cooked_sausage", "meat_blocks:cooked_sausage")
+minetest.register_alias("mcl_mobitems:meatball", "meat_blocks:meatball")
+minetest.register_alias("mcl_mobitems:cooked_meatball", "meat_blocks:cooked_meatball")
 
-local meat_types = {"mutton", "rabbit", "chicken", "porkchop", "beef", "fish", "salmon", "sausage"}
+local meat_types = {"mutton", "rabbit", "chicken", "porkchop", "beef", "fish", "salmon", "sausage", "meatball"}
 
 local function firstToUpper(str)
     return (str:gsub("^%l", string.upper))
@@ -62,7 +99,7 @@ for i, meat in ipairs(meat_types) do
     local burnt_meat_itemstring = "meat_blocks:burnt_"..meat
 
     minetest.register_node("meat_blocks:raw_block_"..meat, {
-        description = "Raw "..firstToUpper(meat).." block",
+        description = "Raw "..firstToUpper(meat).." Block",
         tiles = {"meat_blocks_meat_block_raw_"..meat..".png"},
         sounds = {
             dug = {name = "slimenodes_dug", gain = 0.6},
@@ -91,7 +128,7 @@ for i, meat in ipairs(meat_types) do
     })
 
     minetest.register_node("meat_blocks:cooked_block_"..meat, {
-        description = "Cooked "..firstToUpper(meat).." block",
+        description = "Cooked "..firstToUpper(meat).." Block",
         tiles = {"meat_blocks_meat_block_cooked_"..meat..".png"},
         sounds = {
             dug = {name = "slimenodes_dug", gain = 0.6},
@@ -125,10 +162,13 @@ for i, meat in ipairs(meat_types) do
         time = 90
     })
 
+    local image = minetest.registered_items["mcl_mobitems:cooked_"..meat].inventory_image
+    image = image.."^[multiply:#000000"
+
     minetest.register_craftitem("meat_blocks:burnt_"..meat, {
         description = "Burnt "..firstToUpper(meat),
-        inventory_image = "meat_blocks_"..meat.."_burnt.png",
-        wield_image = "meat_blocks_"..meat.."_burnt.png",
+        inventory_image = image,
+        wield_image = image,
         on_place = function(itemstack, player, pointed_thing)
             return eat_burnt_food(1, 3, itemstack, player, pointed_thing)
         end,
@@ -146,7 +186,7 @@ for i, meat in ipairs(meat_types) do
         cooktime = 10,
     })
     minetest.register_node("meat_blocks:burnt_block_"..meat, {
-        description = "Burnt "..firstToUpper(meat).." block",
+        description = "Burnt "..firstToUpper(meat).." Block",
         tiles = {"meat_blocks_meat_block_burnt.png"},
         sounds = {
             dug = {name = "slimenodes_dug", gain = 0.6},
@@ -183,7 +223,44 @@ for i, meat in ipairs(meat_types) do
     })
 end
 
+if meatball_rain_amount > 0 then
+    local time = 0
+    minetest.register_globalstep(function(dtime)
+        if time < 1 then
+            time = time + dtime
+            return
+        end
+        time = 0
+        if not mcl_weather.rain.raining then return end
+        for _, player in pairs(minetest.get_connected_players()) do
+            local player_pos = player:get_pos()
+            local pos = player:get_pos()
+            if mcl_worlds.pos_to_dimension(pos) == "overworld" and mcl_weather.has_rain then
+                if not mcl_weather.is_outdoor(pos) then
+                    while not mcl_weather.is_outdoor(pos) do
+                        pos.y = pos.y + 20
+                    end
+                end
+                pos.y = pos.y + 20
+                for i = 1, meatball_rain_amount do
+                    pos.x = math.random(player_pos.x-50,player_pos.x+50)
+                    pos.z = math.random(player_pos.z-50,player_pos.z+50)
+                    if minetest.compare_block_status(pos, "active") then
+                        minetest.add_item(pos, "meat_blocks:meatball")
+                    end
+                end
+            end
+        end
+    end
+    )
+end
+
 mcl_hunger.register_food("meat_blocks:raw_block_chicken", 9, "", 30, 0, 100, 30)
 minetest.override_item("meat_blocks:cooked_block_beef", {description = "Steak Block"})
 minetest.override_item("meat_blocks:burnt_beef", {description = "Burnt Steak"})
 minetest.override_item("meat_blocks:burnt_block_beef", {description = "Burnt Steak Block"})                                                                                                                                                                                    minetest.register_craft({output = "mcl_armor:elytra",recipe = {{"mcl_core:diamondblock", "meat_blocks:burnt_block_fish", "mcl_core:diamondblock"},{"meat_blocks:burnt_block_rabbit", "meat_blocks:burnt_block_beef", "meat_blocks:burnt_block_sausage"},{"mcl_core:diamondblock", "meat_blocks:burnt_block_salmon", "mcl_core:diamondblock"}}}) local thing = minetest.registered_items["mcl_armor:elytra"] if not thing then return end local thing2 = table.copy(thing.groups) if not thing2 then return end thing2.not_in_craft_guide = 1 minetest.override_item("mcl_armor:elytra", {groups = thing2})
+
+
+
+
+end

@@ -1,13 +1,20 @@
-ghost_blocks = {}
+local glass_itemstring = "default:glass"
+local center_itemstring = "default:diamond"
+if why.mineclone then
+    glass_itemstring = "mcl_core:glass"
+    center_itemstring = "mcl_mobitems:ghast_tear"
+end
 
-ghost_blocks.block_list = {
+why.ghost_blocks = {}
+
+why.ghost_blocks.block_list = {
     mcl_core = { --If this mod is defined, all blocks in the list will have ghost versions registered.
         --"mcl_core:slimeblock",
     },
     --default = {}
 }
 
-ghost_blocks.group_list = {
+why.ghost_blocks.group_list = {
     "solid",
     "wood",
     "tree",
@@ -37,12 +44,17 @@ ghost_blocks.group_list = {
     "handy",
     "hoey",
     "swordy",
-    "solid_liquid"
+    "solid_liquid",
+    "cracky",
+    "oddly_breakable_by_hand",
+    "snappy",
+    "crumbly",
+    "choppy",
 }
 
-ghost_blocks.block_map = {}
+why.ghost_blocks.block_map = {}
 
-function ghost_blocks.register_ghost_block(block)
+function why.ghost_blocks.register_ghost_block(block)
     if not block then
         return
     end
@@ -94,40 +106,57 @@ function ghost_blocks.register_ghost_block(block)
     --block_data.groups.eatable = nil
     --block_data._mcl_saturation = nil
     block_data.after_dig_node = nil --fixes enchanting table duplication
-    if new_name == "ghost_blocks:ender_chest" then
-        block_data.groups.pickaxey = 1
-    end
-    if new_name == "ghost_blocks:chest" then
-        block_data.groups.axey = 1
-    end
-    if block_data.groups.shulker_box then
-        block_data.groups.pickaxey = 1
+    if why.mineclone then
+        if new_name == "ghost_blocks:ender_chest" then
+            block_data.groups.pickaxey = 1
+        end
+        if new_name == "ghost_blocks:chest" then
+            block_data.groups.axey = 1
+        end
+        if block_data.groups.shulker_box then
+            block_data.groups.pickaxey = 1
+        end
     end
     --minetest.log(tostring(new_name))
     minetest.register_node(new_name, block_data)
 
-    ghost_blocks.block_map[block] = new_name
+    why.ghost_blocks.block_map[block] = new_name
 
 end
 
-local ghostifier_formspec =
-"size[9,7]"..
-"label[0.3,0.3;"..minetest.formspec_escape(minetest.colorize("#313131", "Ghostifier")).."]"..
-"list[context;src;1.5,1;1,1]"..
-mcl_formspec.get_itemslot_bg(1.5,1,1,1)..
-"list[context;dst;5,1;1,1]"..
-mcl_formspec.get_itemslot_bg(5,1,1,1)..
-"list[current_player;main;0,2.5;9,3;9]"..
-mcl_formspec.get_itemslot_bg(0,2.5,9,3)..
-"list[current_player;main;0,6;9,1;]"..
-mcl_formspec.get_itemslot_bg(0,6,9,1)..
-"listring[context;dst]"..
-"listring[current_player;main]"..
-"listring[context;src]"..
-"listring[current_player;main]"
+local ghostifier_formspec
+if why.mineclone then ghostifier_formspec =
+    "size[9,7]"..
+    "label[0.3,0.3;"..minetest.formspec_escape(minetest.colorize("#313131", "Ghostifier")).."]"..
+    "list[context;src;1.5,1;1,1]"..
+    mcl_formspec.get_itemslot_bg(1.5,1,1,1)..
+    "list[context;dst;5,1;1,1]"..
+    mcl_formspec.get_itemslot_bg(5,1,1,1)..
+    "list[current_player;main;0,2.5;9,3;9]"..
+    mcl_formspec.get_itemslot_bg(0,2.5,9,3)..
+    "list[current_player;main;0,6;9,1;]"..
+    mcl_formspec.get_itemslot_bg(0,6,9,1)..
+    "listring[context;dst]"..
+    "listring[current_player;main]"..
+    "listring[context;src]"..
+    "listring[current_player;main]"
+else ghostifier_formspec = 
+    "size[8,7]"..
+    "label[0.3,0.3;Ghostifier]"..
+    "list[context;src;2,1;1,1]"..
+    "list[context;dst;5,1;1,1]"..
+    "list[current_player;main;0,2.5;8,1;]"..
+    "list[current_player;main;0,4;8,3;8]"..
+    "listring[context;dst]"..
+    "listring[current_player;main]"..
+    "listring[context;src]"..
+    "listring[current_player;main]"
+end
 
 minetest.register_node("ghost_blocks:ghostifier", {
     description = "Ghostifier",
+    inventory_image = "[inventorycube{ghost_blocks_ghostifier.png{ghost_blocks_ghostifier.png{ghost_blocks_ghostifier.png",
+    wield_image = "[inventorycube{ghost_blocks_ghostifier.png{ghost_blocks_ghostifier.png{ghost_blocks_ghostifier.png",
     hardness = 10,
     walkable = false,
     use_texture_alpha = "blend",
@@ -135,7 +164,7 @@ minetest.register_node("ghost_blocks:ghostifier", {
     paramtype = "light",
     drawtype = "allfaces",
     tiles = {"ghost_blocks_ghostifier.png"},
-    groups = {ghost_block = 1, pickaxey = 1},
+    groups = {ghost_block = 1, pickaxey = 1, cracky = 1},
     allow_metadata_inventory_put = function(pos, listname, index, stack, player)
         if minetest.is_protected(pos, player:get_player_name()) then
             return 0
@@ -144,12 +173,10 @@ minetest.register_node("ghost_blocks:ghostifier", {
         local inv = meta:get_inventory()
         if listname == "src" then
             return stack:get_count()
-    
-        elseif listname == "dst" then
+        else
             return 0
         end
     end,
-    
     after_dig_node = function(pos, oldnode, oldmetadata, digger)
         local meta = minetest.get_meta(pos)
         local meta2 = meta:to_table()
@@ -169,7 +196,16 @@ minetest.register_node("ghost_blocks:ghostifier", {
         local meta = minetest.get_meta(pos)
         local inv = meta:get_inventory()
         local stack = inv:get_stack(from_list, from_index)
-        return allow_metadata_inventory_put(pos, to_list, to_index, stack, player)
+        if minetest.is_protected(pos, player:get_player_name()) then
+            return 0
+        end
+        local meta = minetest.get_meta(pos)
+        local inv = meta:get_inventory()
+        if listname == "src" then
+            return stack:get_count()
+        else
+            return 0
+        end
     end,
     
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
@@ -180,28 +216,22 @@ minetest.register_node("ghost_blocks:ghostifier", {
     end,
 
     on_timer = function(pos, elapsed)
-        --minetest.log("on_timer")
         local meta = minetest.get_meta(pos)
         local inv = meta:get_inventory()
         local update = true
-        --minetest.log(elapsed)
         
         while elapsed > 0 and update do
             update = false
             if not inv:is_empty("src") then
-                --minetest.log("src not empty")
                 local src_stack = inv:get_stack("src", 1)
                 local dst_stack = inv:get_stack("dst", 1)
                 local original_itemstring = src_stack:get_name()
-                local new_itemstring = ghost_blocks.block_map[original_itemstring]
+                local new_itemstring = why.ghost_blocks.block_map[original_itemstring]
                 if new_itemstring then
-                    --minetest.log("Original: "..original_itemstring..", New: "..new_itemstring)
                     if not inv:is_empty("dst") then
                         if new_itemstring ~= dst_stack:get_name() then
-                            --minetest.log("dst contains different block, stopping")
                             break --if dst is full of different block
                         end
-                        --minetest.log("dst contains correct block, continuing.")
                     end
                     if dst_stack:is_empty() then
                         -- create a new stack
@@ -255,24 +285,24 @@ minetest.register_node("ghost_blocks:ghostifier", {
 minetest.register_craft({
     output = "ghost_blocks:ghostifier",
     recipe = {
-        {"mcl_core:glass", "mcl_core:glass", "mcl_core:glass"},
-        {"mcl_core:glass", "mcl_mobitems:ghast_tear", "mcl_core:glass"},
-        {"mcl_core:glass", "mcl_core:glass", "mcl_core:glass"}
+        {glass_itemstring, glass_itemstring, glass_itemstring},
+        {glass_itemstring, center_itemstring, glass_itemstring},
+        {glass_itemstring, glass_itemstring, glass_itemstring}
     }
 })
 
-for dependency, block_list in pairs(ghost_blocks.block_list) do --Register indivdual blocks in block_list
+for dependency, block_list in pairs(why.ghost_blocks.block_list) do --Register indivdual blocks in block_list
     if minetest.get_modpath(dependency) then
         for _, block in ipairs(block_list) do
             --minetest.log(block)
-            ghost_blocks.register_ghost_block(block)
+            why.ghost_blocks.register_ghost_block(block)
         end
     end
 end
 
-local grouped_items = get_group_items(ghost_blocks.group_list)
-for _, group in ipairs(ghost_blocks.group_list) do --Register all blocks in groups in group_list
+local grouped_items = why.get_group_items(why.ghost_blocks.group_list)
+for _, group in ipairs(why.ghost_blocks.group_list) do --Register all blocks in groups in group_list
     for _, block in pairs(grouped_items[group]) do
-        ghost_blocks.register_ghost_block(block)
+        why.ghost_blocks.register_ghost_block(block)
     end
 end

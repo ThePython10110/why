@@ -1,3 +1,4 @@
+if why.mineclone then
 mcl_stairs.register_stair_and_slab_simple(
     "slimeblock",
     "mcl_core:slimeblock",
@@ -129,3 +130,4 @@ minetest.override_item("mesecons_button:button_slimeblock_off", {
 minetest.override_item("mesecons_button:button_slimeblock_on", {
     use_texture_alpha = "blend",
 })
+end

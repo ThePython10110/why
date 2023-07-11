@@ -1,5 +1,4 @@
-
-
+if why.mineclone then
 local absorb = function(pos)
 	local change = false
 	-- Count number of absorbed river water vs other nodes
@@ -129,3 +128,4 @@ minetest.register_craft({
         {"mcl_nether:netherrack", "mcl_nether:netherrack", "mcl_nether:netherrack"}
     }
 })
+end

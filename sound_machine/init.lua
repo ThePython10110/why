@@ -1,13 +1,33 @@
+local sound_mod = default
+local center_itemstring = "wool:black"
+local copper_itemstring = "default:copper_ingot"
+if why.mineclone then
+    sound_mod = mcl_sounds
+    center_itemstring = "mcl_colorblocks:concrete_black"
+    copper_itemstring = "mcl_copper:copper_ingot"
+end
+
 local sound_machine_context = {}
 
+local sound_machine_buttons
+if why.mineclone then
+    sound_machine_buttons = {
+        {{sound = "tnt_ignite", name = "Ignite TNT"},                           {sound = "tnt_explode", name = "Explosion"},           {sound = "mcl_bows_bow_shoot", name = "Bow Shot",}},
+        {{sound = "mcl_experience_level_up", name = "XP Level Up", gain = 0.6}, {sound = "player_damage", name = "Player Damage"},     {sound = "awards_got_generic", name = "Achievement",}},
+        {{sound = "mobs_mc_wolf_bark", name = "Wolf"},                          {sound = "mobs_mc_zombie_growl", name = "Zombie"},     {sound = "mobs_mc_pillager_ow1", name = "Ow",}},
+        {{sound = "mobs_mc_villager", name = "Villager"},                       {sound = "mobs_mc_spider_random", name = "Spider"},    {sound = "mobs_mc_cat_idle", name = "Cat",}},
+        {{sound = "mobs_mc_cow", name = "Cow"},                                 {sound = "mobs_pig", name = "Pig"},                    {sound = "mobs_mc_ender_dragon_shoot", name = "Ender Dragon"}},
+    }
 
-local sound_machine_buttons = {
-    {{sound = "tnt_ignite", name = "TNT Ignite",},                              {sound = "tnt_explode", name = "Explosion",},           {sound = "mcl_bows_bow_shoot", name = "Bow Shoot",}},
-    {{sound = "mcl_experience_level_up", name = "XP Level Up", gain = 0.6},     {sound = "player_damage", name = "Player Damage",},     {sound = "awards_got_generic", name = "Achievement",}},
-    {{sound = "mobs_mc_wolf_bark", name = "Wolf",},                             {sound = "mobs_mc_zombie_growl", name = "Zombie",},     {sound = "mobs_mc_pillager_ow1", name = "Ow",}},
-    {{sound = "mobs_mc_villager", name = "Villager",},                          {sound = "mobs_mc_spider_random", name = "Spider",},    {sound = "mobs_mc_cat_idle", name = "Cat",}},
-    {{sound = "mobs_mc_cow", name = "Cow",},                                    {sound = "mobs_pig", name = "Pig",},                    {sound = "mobs_mc_ender_dragon_shoot", name = "Ender Dragon"}},
-}
+else
+    sound_machine_buttons = {
+        {{sound = "tnt_ignite", name = "Ignite TNT"},                           {sound = "tnt_explode", name = "Explosion"},            {sound = "default_break_glass", name = "Breaking Glass",}},
+        {{sound = "default_chest_open", name = "Open Chest"},                   {sound = "default_chest_close", name = "Close Chest"},  {sound = "player_damage", name = "Player Damage",}},     
+        {{sound = "default_cool_lava", name = "Lava cooling"},                  {sound = "fire_fire", name = "Fire"},                   {sound = "fire_flint_and_steel", name = "Flint and Steel",}},
+        {{sound = "default_tool_breaks", name = "Tool breaking"},               {sound = "default_water_footstep", name = "Water"},     {sound = "doors_fencegate_open", name = "Open Gate",}},
+        {{sound = "doors_door_open", name = "Open Door"},                       {sound = "doors_door_close", name = "Close Door"},      {sound = "doors_fencegate_close", name = "Close Gate"}},
+    }
+end
 
 local function generate_formspec(sound_box, pitch)
     local height = #sound_machine_buttons + 4
@@ -29,9 +49,17 @@ end
 
 local function show_portable_formspec(itemstack, player, pointed_thing)
     if not player:get_player_control().sneak then 
-        local new_stack = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
-        if new_stack then
-            return new_stack
+        -- Call on_rightclick if the pointed node defines it
+        if pointed_thing and pointed_thing.type == "node" then
+            local pos = pointed_thing.under
+            local node = minetest.get_node(pos)
+            if player and not player:get_player_control().sneak then
+                local nodedef = minetest.registered_nodes[node.name]
+                local on_rightclick = nodedef and nodedef.on_rightclick
+                if on_rightclick then
+                    return on_rightclick(pos, node, player, itemstack, pointed_thing) or itemstack
+                end
+            end
         end
     end
     local custom_sound = player:get_attribute("sound_machine_custom_sound") or "tnt_ignite"
@@ -52,8 +80,8 @@ end
 
 local function sound_machine_play(pos)
     local last_sound = minetest.get_meta(pos):get_string("sound_machine_last_sound")
-    minetest.log(last_sound)
-    local pitch = minetest.get_meta(pos):get_string("sound_machine_pitch") or 1.0
+    --minetest.log(last_sound)
+    local pitch = tonumber(minetest.get_meta(pos):get_string("sound_machine_pitch"))
     minetest.sound_play({name = last_sound, pitch = pitch}, { pos = pos, max_hear_distance = 20})
 end
 
@@ -67,7 +95,7 @@ minetest.register_tool("sound_machine:portable_sound_machine", {
 minetest.register_node("sound_machine:sound_machine", {
     description = "Sound Machine",
     tiles = {"sound_machine_sound_machine.png"},
-	groups = {pickaxey = 1, material_stone = 1},
+	groups = {pickaxey = 1, cracky=2, material_stone = 1},
 	is_ground_content = false,
 	place_param2 = 0,
 	on_rightclick = function(pos, node, clicker) -- change sound when rightclicked
@@ -81,7 +109,7 @@ minetest.register_node("sound_machine:sound_machine", {
 	on_punch = function(pos, node) -- play current sound when punched
 		sound_machine_play(pos)
 	end,
-	sounds = mcl_sounds.node_sound_wood_defaults(),
+	sounds = sound_mod.node_sound_wood_defaults(),
 	mesecons = {effector = { -- play sound when activated
 		action_on = function(pos, node)
 			sound_machine_play(pos)
@@ -110,7 +138,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
         end
 
         if (fields.key_enter_field == "custom_sound" or fields.custom_sound_button) and fields.custom_sound then
-                local pitch = tonumber(player:get_attribute("sound_machine_pitch"))
+                local pitch = tonumber(player:get_attribute("sound_machine_pitch")) or 1
             minetest.sound_play({name = fields.custom_sound, pitch = pitch}, {pos = player_pos, max_hear_distance = 20})
             player:set_attribute("sound_machine_custom_sound", fields.custom_sound)
         end
@@ -118,7 +146,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
             local _, _, row, column = string.find(field, "^(%d+)_(%d+)$")
             if row and column then
                 local sound_data = sound_machine_buttons[tonumber(row)][tonumber(column)]
-                local pitch = tonumber(player:get_attribute("sound_machine_pitch"))
+                local pitch = tonumber(player:get_attribute("sound_machine_pitch")) or 1
                 minetest.sound_play({name = sound_data.sound, gain = sound_data.gain, pitch = pitch}, { pos = player_pos, max_hear_distance = 20})
                 return
             end
@@ -148,7 +176,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
                 local _, _, row, column = string.find(field, "^(%d+)_(%d+)$")
                 if row and column then
                     local sound_data = sound_machine_buttons[tonumber(row)][tonumber(column)]
-                    local pitch = tonumber(minetest.get_meta(pos):get_string("sound_machine_pitch"))
+                    local pitch = tonumber(minetest.get_meta(pos):get_string("sound_machine_pitch")) or 1
                     minetest.get_meta(pos):set_string("sound_machine_last_sound", sound_data.sound)
                     sound_machine_play(pos)
                     return
@@ -171,8 +199,8 @@ minetest.register_craft({
 minetest.register_craft({
     output = "sound_machine:sound_machine",
     recipe = {
-        {"mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot",},
-        {"mcl_copper:copper_ingot", "mcl_colorblocks:concrete_black", "mcl_copper:copper_ingot",},
-        {"mcl_copper:copper_ingot", "mcl_copper:copper_ingot", "mcl_copper:copper_ingot",},
+        {copper_itemstring, copper_itemstring, copper_itemstring},
+        {copper_itemstring, center_itemstring, copper_itemstring},
+        {copper_itemstring, copper_itemstring, copper_itemstring},
     }
 })

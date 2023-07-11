@@ -15,7 +15,7 @@
         Solid liquid recipes now return the bucket.
         Solid liquids do not take nearly as long to break (for some reason I made it as long as obsidian).
         Any solid liquid with "group:lava" will set players on fire and damage them.
-            Mobs are not damaged by solid liquids unless inside them (would require MineClone change),
+            Mobs are not damaged by solid liquids unless inside them (would require MineClone change or a lot of work/lag),
             but ghost solid liquids work.
         Solid liquid blocks (including ghost versions) are now closer to actual liquid blocks (swimming, drowning, etc.)
         Solid liquid blocks are automatically registered (depends on dependencies and mod load order).
@@ -37,3 +37,17 @@
 2.3
     Useless Beans:
         Added Useless Bean Armor.
+3.0
+    Added Minetest Game support for all mods except Lava Sponge, Meat Blocks, and Slime Things
+        Some features of other mods such as Sticky Blocks are also not in Minetest Game.
+    Only one global varaiable (`why`) is created.
+    Ghost Blocks:
+        Improved the Ghostifier wield_image and inventory_image to be more translucent.
+    Meat Blocks:
+        [MineClone] Meatballs fall from the sky when it rains
+        Burnt meat textures are now automatically generated
+    Fake Liquids:
+        [MineClone] Milk is now an actual liquid. It's basically nonrenewable water. I may eventually make it clear player effects when touching it.
+    Small Why Things:
+        Craftable Barriers are now yellow to differentiate them from normal barriers.
+        [MineClone] Added blue feathers (completely useless)

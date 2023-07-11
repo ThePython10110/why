@@ -1,4 +1,4 @@
-function get_group_items(groups, allow_duplicates, include_no_group)
+function why.get_group_items(groups, allow_duplicates, include_no_group)
 	if type(groups) ~= "table" then
 		return nil
 	end
