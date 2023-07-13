@@ -51,3 +51,6 @@
     Small Why Things:
         Craftable Barriers are now yellow to differentiate them from normal barriers.
         [MineClone] Added blue feathers (completely useless)
+3.1
+    why_init:
+        Set namespace and added why:<item> aliases
