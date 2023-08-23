@@ -53,8 +53,8 @@ minetest.register_node("small_why_things:craftable_barrier", {
 	groups = {not_solid = 1, cracky = 1, pickaxey = 1},
 	_mcl_blast_resistance = 1200,
 	_mcl_hardness = 50,
-	after_place_node = function(pos, placer, itemstack, pointed_thing)
-		if placer == nil then
+	after_place_node = function(pos, player, itemstack, pointed_thing)
+		if player == nil then
 			return
 		end
 		minetest.add_particle({
@@ -63,7 +63,7 @@ minetest.register_node("small_why_things:craftable_barrier", {
 			size = 8,
 			texture = "small_why_things_craftable_barrier.png^[colorize:#FFFF00:127",
 			glow = 14,
-			playername = placer:get_player_name()
+			playername = player:get_player_name()
 		})
 	end,
 })

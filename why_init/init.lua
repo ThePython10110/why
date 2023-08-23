@@ -12,6 +12,7 @@ local mod_list = {
     "sound_machine",
     "sticky_things",
     "useless_beans",
+    "useful_green_potatoes",
     "why_init",
 }
 

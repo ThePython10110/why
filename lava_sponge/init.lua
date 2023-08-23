@@ -36,17 +36,17 @@ minetest.register_node("lava_sponge:lava_sponge", {
 	stack_max = 64,
 	sounds = mcl_sounds.node_sound_dirt_defaults(),
 	groups = {handy=1, hoey=1, building_block=1},
-	on_place = function(itemstack, placer, pointed_thing)
-		local pn = placer:get_player_name()
+	on_place = function(itemstack, player, pointed_thing)
+		local pn = player:get_player_name()
 		if pointed_thing.type ~= "node" then
 			return itemstack
 		end
 
 		-- Use pointed node's on_rightclick function first, if present
 		local node = minetest.get_node(pointed_thing.under)
-		if placer and not placer:get_player_control().sneak then
+		if player and not player:get_player_control().sneak then
 			if minetest.registered_nodes[node.name] and minetest.registered_nodes[node.name].on_rightclick then
-				return minetest.registered_nodes[node.name].on_rightclick(pointed_thing.under, node, placer, itemstack) or itemstack
+				return minetest.registered_nodes[node.name].on_rightclick(pointed_thing.under, node, player, itemstack) or itemstack
 			end
 		end
 
@@ -68,14 +68,14 @@ minetest.register_node("lava_sponge:lava_sponge", {
 			-- FIXME: pos is not always the right placement position because of pointed_thing
 			local absorbed, wet_sponge = absorb(pos)
 			if absorbed then
-				minetest.item_place_node(ItemStack(wet_sponge), placer, pointed_thing)
-				if not minetest.is_creative_enabled(placer:get_player_name()) then
+				minetest.item_place_node(ItemStack(wet_sponge), player, pointed_thing)
+				if not minetest.is_creative_enabled(player:get_player_name()) then
 					itemstack:take_item()
 				end
 				return itemstack
 			end
 		end
-		return minetest.item_place_node(itemstack, placer, pointed_thing)
+		return minetest.item_place_node(itemstack, player, pointed_thing)
 	end,
 	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,

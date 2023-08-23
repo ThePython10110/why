@@ -54,3 +54,16 @@
 3.1
     why_init:
         Set namespace and added why:<item> aliases
+4.0
+    Added Useful Green Potatoes:
+        Look identical to Useless Beans
+        Tools/armor basically copied from iron/steel
+        Useful Green Potato Liquid is identical to water but disables drowning
+        Golden Useful Green Potato is identical to MineClone's golden apple (or just heals you a lot in Minetest Game)
+        Useful Green Potato Block heals players that fall on it (healing is 2.5x what normal fall damage would be)
+            Known issue: Landing near one is enough to trigger the healing. This is Minetest's fault, and it's either that or forcing players to land in the exact center.
+        Useful Green Potato Ingot Blocks multiply fall damage slightly more than Useless Bean Ingot Blocks, and also damage players at 3 hearts/second.
+    Useless Beans:
+        Biome requirements removed! Useless Beans can now spawn anywhere!
+    Sticky Things:
+        Players cannot jump while standing on Sticky Blocks.

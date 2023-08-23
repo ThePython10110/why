@@ -36,32 +36,6 @@ minetest.register_decoration({
     },
     y_min = 4,
     y_max = 30000,
-    biomes = {
-        "Desert",
-        "Mesa",
-        "Mesa_sandlevel",
-        "MesaBryce",
-        "MesaBryce_sandlevel",
-        "MesaPlateauF",
-        "MesaPlateauF_sandlevel",
-        "MesaPlateauFM",
-        "MesaPlateauFM_sandlevel",
-        "BambooJungleEdge",
-        "MangroveSwamp",
-        "Jungle",
-        "JungleEdge",
-        "BambooJungle",
-        "BambooJungleM",
-        "JungleEdgeM",
-        "JungleM",
-        "BambooJungleEdgeM",
-        "cold_desert",
-        "desert",
-        "rainforest",
-        "rainforest_swamp",
-        "sandstone_desert",
-        "savanna"
-    },
     decoration = "useless_beans:useless_bean",
     height = 1,
 })
@@ -306,9 +280,9 @@ if why.mineclone or minetest.get_modpath("3d_armor") then
             },
             toughness = 0,
             groups = {useless = 1},
-            craft_material = "useless_beans:useless_bean",
+            craft_material = "useless_beans:useless_bean_ingot",
             cook_material = "useless_beans:useless_bean_ingot_block",
-            repair_material = "useless_beans:useless_bean"
+            repair_material = "useless_beans:useless_bean_ingot"
         })
     else
         for name, type in pairs({Helmet = "head", Chestplate = "torso", Leggings = "legs", Boots = "feet"}) do

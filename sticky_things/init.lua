@@ -129,7 +129,7 @@ if why.mineclone then
 	minetest.register_node("sticky_things:sticky_block", {
 		description = "Sticky Block",
 		_mcl_hardness = 3,
-		groups = {cracky = 3, pickaxey = 1},
+		groups = {cracky = 3, pickaxey = 1, disable_jump = 1},
 		tiles = {"sticky_things_sticky_block.png"},
 		sounds = sticky_block_sounds
 	})

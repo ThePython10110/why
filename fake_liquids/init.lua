@@ -12,7 +12,7 @@ if why.mineclone then
 	stone_itemstring = "mcl_core:stone"
 	cobble_itemstring = "mcl_core:cobble"
 	obsidian_itemstring = "mcl_core:obsidian"
-	nether_check = function(pos, placer)
+	nether_check = function(pos, player)
 		local nn = minetest.get_node(pos).name
 		-- Pour into cauldron
 		if minetest.get_item_group(nn, "cauldron") ~= 0 then
