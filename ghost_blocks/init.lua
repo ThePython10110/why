@@ -121,36 +121,29 @@ function why.ghost_blocks.register_ghost_block(block)
     minetest.register_node(new_name, block_data)
 
     why.ghost_blocks.block_map[block] = new_name
+    why.ghost_blocks.block_map[new_name] = block
 
 end
 
-local ghostifier_formspec
-if why.mineclone then ghostifier_formspec =
-    "size[9,7]"..
-    "label[0.3,0.3;"..minetest.formspec_escape(minetest.colorize("#313131", "Ghostifier")).."]"..
+
+local width = 8
+if why.mineclone then width = 9 end
+
+local ghostifier_formspec =
+    "size["..tostring(width)..",7]"..
+    "label[0.3,0.3;"..minetest.formspec_escape(minetest.colorize("#55555", "Ghostifier")).."]"..
     "list[context;src;1.5,1;1,1]"..
+    "list[context;dst;5,1;1,1]"..
+    why.inventory_formspec(0,2.5)..
+    "listring[context;dst]"..
+    "listring[current_player;main]"..
+    "listring[context;src]"..
+    "listring[current_player;main]"
+
+if why.mineclone then
+    ghostifier_formspec = ghostifier_formspec..
     mcl_formspec.get_itemslot_bg(1.5,1,1,1)..
-    "list[context;dst;5,1;1,1]"..
-    mcl_formspec.get_itemslot_bg(5,1,1,1)..
-    "list[current_player;main;0,2.5;9,3;9]"..
-    mcl_formspec.get_itemslot_bg(0,2.5,9,3)..
-    "list[current_player;main;0,6;9,1;]"..
-    mcl_formspec.get_itemslot_bg(0,6,9,1)..
-    "listring[context;dst]"..
-    "listring[current_player;main]"..
-    "listring[context;src]"..
-    "listring[current_player;main]"
-else ghostifier_formspec = 
-    "size[8,7]"..
-    "label[0.3,0.3;Ghostifier]"..
-    "list[context;src;2,1;1,1]"..
-    "list[context;dst;5,1;1,1]"..
-    "list[current_player;main;0,2.5;8,1;]"..
-    "list[current_player;main;0,4;8,3;8]"..
-    "listring[context;dst]"..
-    "listring[current_player;main]"..
-    "listring[context;src]"..
-    "listring[current_player;main]"
+    mcl_formspec.get_itemslot_bg(5,1,1,1)
 end
 
 minetest.register_node("ghost_blocks:ghostifier", {

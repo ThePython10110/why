@@ -4,6 +4,7 @@ why.mineclone = minetest.get_modpath("mcl_core")
 
 local mod_list = {
     "fake_liquids",
+    "flying_sausage",
     "get_group_items",
     "lava_sponge",
     "meat_blocks",
@@ -15,6 +16,20 @@ local mod_list = {
     "useful_green_potatoes",
     "why_init",
 }
+
+function why.inventory_formspec(x,y)
+    local formspec = ""
+    if why.mineclone then
+        formspec = "list[current_player;main;"..tostring(x)..","..tostring(y)..";9,3;9]"..
+            mcl_formspec.get_itemslot_bg(x,y,9,3)..
+            "list[current_player;main;"..tostring(x)..","..tostring(y+3.25)..";9,1]"..
+            mcl_formspec.get_itemslot_bg(x,y+3.25,9,1)
+    else
+        formspec = "list[current_player;main;"..tostring(x)..","..tostring(y)..";8,1]"..
+        "list[current_player;main;"..tostring(x)..","..tostring(y+1.25)..";8,3;8]"
+    end
+    return formspec
+end
 
 if why.mineclone then
     for _, mod in ipairs(mod_list) do
@@ -32,3 +47,5 @@ else
         end
     end)
 end
+
+minetest.register_alias("why:ghostifier", "ghost_blocks:ghostifier")
