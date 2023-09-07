@@ -134,5 +134,5 @@ minetest.register_craft({
 	output = "lava_sponge:lava_sponge_wet",
 	type = "shapeless",
 	recipe = {"mcl_buckets:bucket_empty", "lava_sponge:lava_sponge_wet"},
-	replacements = {{"lava_sponge:lava_sponge_wet", "lava_sponge:lava_sponge"}}
+	replacements = {{"mcl_buckets:bucket_empty", "mcl_buckets:bucket_lava"}}
 })

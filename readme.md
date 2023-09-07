@@ -177,3 +177,7 @@ You can craft an elytra with meat blocks. Just put diamond blocks in the corners
     * The setting has been changed from "x meatballs spawn every second" to "1 meatball spawns every x seconds," (x can be a decimal) because there were too many.
 * Ghost Blocks:
     * Ghost Blocks can now be unghostified by putting them back into the Ghostifier.
+### 5.1
+* Lava Sponge
+    * I really should have tested before releasing.
+    * The lava sponge/bucket recipe now actually does what it's supposed to.
