@@ -181,3 +181,7 @@ You can craft an elytra with meat blocks. Just put diamond blocks in the corners
 * Lava Sponge
     * I really should have tested before releasing.
     * The lava sponge/bucket recipe now actually does what it's supposed to.
+### 5.2
+* Fake Liquids:
+    * [MineClone] Attempting to brew fake liquids no longer crashes the server.
+    * This crash has probably happened since 3.0, when there were so many changes (adding MTG compatibility) that I didn't test everything.

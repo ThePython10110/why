@@ -424,7 +424,7 @@ end)
 
 local fake_liquid_recipes
 if why.mineclone then
-	local fake_liquid_recipes = {
+	fake_liquid_recipes = {
 		["mcl_buckets:bucket_water"] = "fake_liquids:bucket_fake_lava",
 		["mcl_buckets:bucket_river_water"] = "fake_liquids:bucket_fake_lava",
 		["mcl_buckets:bucket_lava"] = "fake_liquids:bucket_fake_water",
@@ -438,7 +438,7 @@ else
 end
 
 if why.mineclone then
-	--override brewing for fake lava/water
+	--override brewing for fake liquids
 	local old_alchemy = mcl_potions.get_alchemy
 	mcl_potions.get_alchemy = function(ingr, pot)
 		if ingr == "mcl_potions:fermented_spider_eye" then
