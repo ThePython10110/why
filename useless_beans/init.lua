@@ -2,7 +2,7 @@ local sound_mod = default
 local gold_itemstring = "default:gold_ingot"
 local water_itemstring = "bucket:bucket_water"
 local stick_itemstring = "default:stick"
-if why.mineclone then
+if why.mcl then
     sound_mod = mcl_sounds
     gold_itemstring = "mcl_core:gold_ingot"
     water_itemstring = "mcl_buckets:bucket_water"
@@ -120,7 +120,7 @@ minetest.register_craft({
     }
 })
 
-if why.mineclone then
+if why.mcl then
     minetest.register_node("useless_beans:useless_bean_gold_enchanted", {
         description = "Enchanted Golden Useless Bean",
         drawtype = "plantlike",
@@ -242,7 +242,7 @@ minetest.register_node("useless_beans:useless_bean_liquid_source", {
 	-- Hardness intentionally set to infinite instead of 100 (Minecraft value) to avoid problems in creative mode
 	_mcl_hardness = -1,
 })
-if why.mineclone then
+if why.mcl then
     mcl_buckets.register_liquid({
         source_place = "useless_beans:useless_bean_liquid_source",
         source_take = {"useless_beans:useless_bean_liquid_source"},
@@ -266,11 +266,17 @@ minetest.register_craft({
 })
 
 ---------------------USELESS BEAN TOOLS/ARMOR------------------------
-if why.mineclone or minetest.get_modpath("3d_armor") then
-    if why.mineclone then
+if why.mcl or minetest.get_modpath("3d_armor") then
+    if why.mcl then
         mcl_armor.register_set({
             name = "useless_bean",
             description = "Useless Bean",
+            descriptions = why.mineclonia and {
+                head = "Useless Bean Helmet",
+                torso = "Useless Bean Chestplate",
+                legs = "Useless Bean Leggings",
+                feet = "Useless Bean Boots",
+            },
             durability = 0,
             points = {
                 head = 0,
@@ -310,7 +316,6 @@ if why.mineclone or minetest.get_modpath("3d_armor") then
                 {b, b, b},
             }
         })
-        local b = "useless_beans:useless_bean"
         minetest.register_craft({
             output = "useless_beans:leggings_useless_bean",
             recipe = {
@@ -319,7 +324,6 @@ if why.mineclone or minetest.get_modpath("3d_armor") then
                 {b, "",b},
             }
         })
-        local b = "useless_beans:useless_bean"
         minetest.register_craft({
             output = "useless_beans:boots_useless_bean",
             recipe = {
@@ -349,7 +353,7 @@ if why.mineclone or minetest.get_modpath("3d_armor") then
     end
 
     local bean_helmet_base_def = {}
-    if why.mineclone then
+    if why.mcl then
         --bean_helmet_base_def.on_secondary_use = mcl_armor.equip_on_use
         bean_helmet_base_def._on_equip = add_bean_hud
         bean_helmet_base_def._on_unequip = remove_bean_hud
@@ -361,7 +365,7 @@ if why.mineclone or minetest.get_modpath("3d_armor") then
     minetest.override_item("useless_beans:helmet_useless_bean", bean_helmet_base_def)
 
     minetest.register_on_joinplayer(function(player)
-        if why.mineclone then
+        if why.mcl then
             if player:get_inventory():get_stack("armor", 2):get_name() == "useless_beans:helmet_useless_bean" then
                 add_bean_hud(player)
             end
@@ -378,7 +382,7 @@ if why.mineclone or minetest.get_modpath("3d_armor") then
         end
     end)
     minetest.register_on_dieplayer(function(player)
-        if why.mineclone then
+        if why.mcl then
             if not minetest.settings:get_bool("mcl_keepInventory") then
                 remove_bean_hud(player)
             end

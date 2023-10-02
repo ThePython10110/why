@@ -1,4 +1,4 @@
-if why.mineclone then
+if why.mcl then
 local absorb = function(pos)
 	local change = false
 	-- Count number of absorbed river water vs other nodes
@@ -25,7 +25,8 @@ end
 minetest.register_node("lava_sponge:lava_sponge", {
 	description = "Lava Sponge",
 	_tt_help = "Removes lava on contact",
-	_doc_items_longdesc = "Lava sponges are blocks which remove lava around them when they are placed or come in contact with lava, turning it into a wet sponge.",
+	_doc_items_longdesc = "Lava sponges are blocks which remove lava around them when they are placed or"..
+		"come in contact with lava, turning it into a wet sponge.",
 	drawtype = "normal",
 	is_ground_content = false,
 	tiles = {"mcl_sponges_sponge.png"..mcl_enchanting.overlay},

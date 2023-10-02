@@ -1,4 +1,4 @@
-if why.mineclone then
+if why.mcl then
 
 
 
@@ -119,7 +119,7 @@ end)
 
 -- I don't know why I did all this MTG compatibility stuff...
 local width = 8
-if why.mineclone then width = 9 end
+if why.mcl then width = 9 end
 
 local formspec =
     "size["..tostring(width)..",7]"..
@@ -127,7 +127,7 @@ local formspec =
     why.inventory_formspec(0,3)..
     "listring[current_player;main]"..
     "listring[current_player;flying_sausage_flight_stomach]"
-if why.mineclone then
+if why.mcl then
     formspec = formspec..mcl_formspec.get_itemslot_bg(width/2-0.5,1,1,1)
 end
 
@@ -184,7 +184,7 @@ minetest.register_tool("flying_sausage:flying_sausage", {
     wield_image = "meat_blocks_sausage_cooked.png",
     inventory_image = "meat_blocks_sausage_cooked.png",
     on_place = minetest.item_eat(9999999999999999), -- You'll be fed as long as Chell was in suspension...
-    on_secondary_use = minetest.item_eat(9999999999999999),
+    on_secondary_use = minetest.item_eat(9999999999999999), -- Except for some reason it rounds to 10^??? :(
     _mcl_saturation = 9999999999999999,
 })
 

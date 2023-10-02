@@ -1,4 +1,4 @@
-if why.mineclone then
+if why.mcl then
 mcl_stairs.register_stair_and_slab_simple(
     "slimeblock",
     "mcl_core:slimeblock",
@@ -7,7 +7,13 @@ mcl_stairs.register_stair_and_slab_simple(
     "Double Slime Slab"
 )
 
-for i, block in ipairs({"mcl_stairs:slab_slimeblock", "mcl_stairs:slab_slimeblock_top", "mcl_stairs:slab_slimeblock_double"}) do
+local slime_slabs = {
+    "mcl_stairs:slab_slimeblock",
+    "mcl_stairs:slab_slimeblock_top",
+    "mcl_stairs:slab_slimeblock_double"
+}
+
+for i, block in ipairs(slime_slabs) do
     local def = minetest.registered_items[block]
     local groups = def.groups
     groups.dig_immediate = 3
@@ -23,7 +29,13 @@ for i, block in ipairs({"mcl_stairs:slab_slimeblock", "mcl_stairs:slab_slimebloc
     })
 end
 
-for i, block in ipairs({"mcl_stairs:stair_slimeblock", "mcl_stairs:stair_slimeblock_outer", "mcl_stairs:stair_slimeblock_inner"}) do
+local slime_stairs = {
+    "mcl_stairs:stair_slimeblock",
+    "mcl_stairs:stair_slimeblock_outer",
+    "mcl_stairs:stair_slimeblock_inner"
+}
+
+for i, block in ipairs(slime_stairs) do
     local def = minetest.registered_items[block]
     local groups = def.groups
     groups.dig_immediate = 3
@@ -80,7 +92,7 @@ if minetest.get_modpath("mesecons_pressureplates") then
             { "mcl_core_slime.png" },
             "mcl_core_slime.png",
             nil,
-            { --no idea why it's completely silent... 
+            { --no idea why it's completely silent...
                 dug = {name = "slimenodes_dug", gain = 0.6},
                 place = {name = "slimenodes_place", gain = 0.6},
                 footstep = {name = "slimenodes_step", gain = 0.3},
@@ -88,7 +100,8 @@ if minetest.get_modpath("mesecons_pressureplates") then
             { { "mcl_core:slimeblock", "mcl_core:slimeblock" } },
             {bouncy = 80, dig_immediate = 3, fall_damage_add_percent = -100,},
             nil,
-            "A slime pressure plate is a redstone component which supplies its surrounding blocks with redstone power while any movable object (including dropped items, players and mobs) rests on top of it."
+            "A slime pressure plate is a redstone component which supplies its surrounding blocks with redstone "..
+            "power while any movable object (including dropped items, players and mobs) rests on top of it."
         )
     end
 end
@@ -117,7 +130,8 @@ if minetest.get_modpath("mesecons_button") then
             {bouncy = 80, dig_immediate = 3, fall_damage_add_percent = -100,},
             14,
             true,
-            "A slime button is a redstone component made out of slime which can be pushed to provide redstone power. When pushed, it powers adjacent redstone components for 14 seconds. Slime buttons may also be pushed by arrows.",
+            "A slime button can be pushed to provide redstone power. When pushed, "..
+            "it powers adjacent redstone components for 14 seconds. Slime buttons may also be pushed by arrows.",
             "slimenodes_place"
         )
     end

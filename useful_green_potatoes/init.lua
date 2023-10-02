@@ -2,7 +2,7 @@ local sound_mod = default
 local gold_itemstring = "default:gold_ingot"
 local water_itemstring = "bucket:bucket_water"
 local stick_itemstring = "default:stick"
-if why.mineclone then
+if why.mcl then
     sound_mod = mcl_sounds
     gold_itemstring = "mcl_core:gold_ingot"
     water_itemstring = "mcl_buckets:bucket_water"
@@ -25,7 +25,7 @@ minetest.register_node("useful_green_potatoes:useful_green_potato", {
 })
 
 local y_max = 31000
-if why.mineclone then y_max = mcl_vars.mg_overworld_max end
+if why.mcl then y_max = mcl_vars.mg_overworld_max end
 
 minetest.register_decoration({
     decoration = "useful_green_potatoes:useful_green_potato",
@@ -124,8 +124,6 @@ minetest.register_globalstep(function(dtime)
 	if time < 0.5 then return end
 	time = 0
 	for _, player in pairs(minetest.get_connected_players()) do
-		-- who am I?
-		local name = player:get_player_name()
 
 		-- where am I?
 		local pos = player:get_pos()
@@ -137,12 +135,12 @@ minetest.register_globalstep(function(dtime)
             near = minetest.find_node_near({x=pos.x, y=pos.y-1, z=pos.z}, 1, itemstring)
         end
         if near then
-            -- Am I touching the solid liquid source? If so, it hurts
+            -- Am I touching the useful green potato ingot block? If so, it hurts
             local dist = vector.distance(pos, near)
             local dist_feet = vector.distance({x=pos.x, y=pos.y-1, z=pos.z}, near)
             if dist < 1.1 or dist_feet < 1.1 then
                 if player:get_hp() > 0 then
-                    if why.mineclone then
+                    if why.mcl then
                         mcl_util.deal_damage(player, 3, {type = "generic"})
                     else
                         player:set_hp(player:get_hp() - 3)
@@ -165,7 +163,7 @@ minetest.register_craft({
 local gapple_hunger_restore = minetest.item_eat(6)
 
 local function eat_gapple(itemstack, player, pointed_thing)
-    if why.mineclone then
+    if why.mcl then
         local regen_duration, absorbtion_factor = 5, 1
         --TODO: Absorbtion
         mcl_potions.regeneration_func(player, 2, regen_duration)
@@ -253,14 +251,6 @@ minetest.register_node("useful_green_potatoes:useful_green_potato_liquid_flowing
 
 minetest.register_node("useful_green_potatoes:useful_green_potato_liquid_source", {
 	description = "Useful Green Potato Liquid Source",
-	_doc_items_entry_name = "Useful Green Potato Liquid",
-	_doc_items_longdesc =
-"Water is abundant in oceans and also appears in a few springs in the ground. You can swim easily in water, but you need to catch your breath from time to time.".."\n\n"..
-"Water interacts with lava in various ways:".."\n"..
-"• When water is directly above or horizontally next to a lava source, the lava turns into obsidian.".."\n"..
-"• When flowing water touches flowing lava either from above or horizontally, the lava turns into cobblestone.".."\n"..
-"• When water is directly below lava, the water turns into stone.".."\n",
-	_doc_items_hidden = false,
 	drawtype = "liquid",
 	waving = 3,
 	tiles = {
@@ -297,7 +287,7 @@ minetest.register_node("useful_green_potatoes:useful_green_potato_liquid_source"
 	-- Hardness intentionally set to infinite instead of 100 (Minecraft value) to avoid problems in creative mode
 	_mcl_hardness = -1,
 })
-if why.mineclone then
+if why.mcl then
     mcl_buckets.register_liquid({
         source_place = "useful_green_potatoes:useful_green_potato_liquid_source",
         source_take = {"useful_green_potatoes:useful_green_potato_liquid_source"},
@@ -321,11 +311,17 @@ minetest.register_craft({
 })
 
 ---------------------USELESS BEAN TOOLS/ARMOR------------------------
-if why.mineclone or minetest.get_modpath("3d_armor") then
-    if why.mineclone then
+if why.mcl or minetest.get_modpath("3d_armor") then
+    if why.mcl then
         mcl_armor.register_set({
             name = "useful_green_potato",
             description = "Useful Green Potato",
+            descriptions = why.mineclonia and {
+                head = "Useful Green Potato Helmet",
+                torso = "Useful Green Potato Chestplate",
+                legs = "Useful Green Potato Leggings",
+                feet = "Useful Green Potato Boots",
+            },
             durability = 240,
             points = {
                 head = 2,
@@ -352,7 +348,7 @@ if why.mineclone or minetest.get_modpath("3d_armor") then
         end
     else
         -- I'm lazy; they're identical.
-        for type, name in pairs({head = "Helmet", torso = "Chestplate", legs = "Leggings", feet = "Boots"}) do
+        for type, name in pairs({head = "Helmet", torso = "Chestplate", legs = "Leggings", feet = "Boots", shield = "Shield"}) do
             armor:register_armor("useful_green_potatoes:"..name:lower().."_useful_green_potato", {
                 description = "Useful Green Potato "..name,
                 texture = "useless_beans_"..name:lower().."_useless_bean.png",
@@ -393,12 +389,20 @@ if why.mineclone or minetest.get_modpath("3d_armor") then
                 {p, "",p}
             }
         })
+        minetest.register_craft({
+            output = "useful_green_potatoes:shield_useful_green_potato",
+            recipe = {
+                {p, p,p},
+                {p, p,p},
+                {"", p,""},
+            }
+        })
     end
 end
 
 for name, long_name in pairs({pick = "Pickaxe", axe = "Axe", hoe = "Hoe", sword = "Sword", shovel = "Shovel"}) do
     local def
-    if why.mineclone then
+    if why.mcl then
         local mod = "mcl_tools"
         if name == "hoe" then mod = "mcl_farming" end
         def = table.copy(minetest.registered_items[mod..":"..name.."_iron"])

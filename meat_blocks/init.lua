@@ -1,4 +1,4 @@
-if why.mineclone then
+if why.mcl then
 
 
 
@@ -7,7 +7,7 @@ if why.mineclone then
 local meatball_rain_amount = minetest.settings:get("meat_blocks_meatball_rain_amount") or 1
 
 function why.eat_burnt_food(hunger_restore, fire_time, itemstack, player, pointed_thing)
-    if not player:get_player_control().sneak then 
+    if not player:get_player_control().sneak then
         local new_stack = mcl_util.call_on_rightclick(itemstack, player, pointed_thing)
         if new_stack then
             return new_stack
@@ -112,7 +112,7 @@ for i, meat in ipairs(meat_types) do
         _mcl_blast_resistance = 1,
         _mcl_saturation = 5,
     })
-    
+
     minetest.register_craft({
         output = "meat_blocks:raw_block_"..meat,
         recipe = {
@@ -141,7 +141,7 @@ for i, meat in ipairs(meat_types) do
         _mcl_blast_resistance = 1,
         _mcl_saturation = 54,
     })
-    
+
     minetest.register_craft({
         output = "meat_blocks:cooked_block_"..meat,
         recipe = {
@@ -244,9 +244,7 @@ if meatball_rain_amount > 0 then
                 pos.y = pos.y + 20
                 pos.x = math.random(player_pos.x-50,player_pos.x+50)
                 pos.z = math.random(player_pos.z-50,player_pos.z+50)
-                if minetest.compare_block_status(pos, "active") then
-                    minetest.add_item(pos, "meat_blocks:meatball")
-                end
+                minetest.add_item(pos, "meat_blocks:meatball")
             end
         end
     end
@@ -258,5 +256,8 @@ minetest.override_item("meat_blocks:cooked_block_beef", {description = "Steak Bl
 minetest.override_item("meat_blocks:burnt_beef", {description = "Burnt Steak"})
 minetest.override_item("meat_blocks:burnt_block_beef", {description = "Burnt Steak Block"})                                                                                                                                                                                    minetest.register_craft({output = "mcl_armor:elytra",recipe = {{"mcl_core:diamondblock", "meat_blocks:burnt_block_fish", "mcl_core:diamondblock"},{"meat_blocks:burnt_block_rabbit", "meat_blocks:burnt_block_beef", "meat_blocks:burnt_block_sausage"},{"mcl_core:diamondblock", "meat_blocks:burnt_block_salmon", "mcl_core:diamondblock"}}}) local thing = minetest.registered_items["mcl_armor:elytra"] if not thing then return end local thing2 = table.copy(thing.groups) if not thing2 then return end thing2.not_in_craft_guide = 1 minetest.override_item("mcl_armor:elytra", {groups = thing2})
 
+minetest.override_item("meat_blocks:raw_block_fish", {groups = {
+    food = 2, eatable = 9, handy = 1, smoker_cookable = 1, raw_meat_block = 1, enderman_takable=1, flammable = 1
+}})
 
 end

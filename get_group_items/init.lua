@@ -15,7 +15,7 @@ function why.get_group_items(groups, allow_duplicates, include_no_group)
     if include_no_group then
         result["NO_GROUP"] = {}
     end
-    local in_group = false
+    local in_group
 
 	for name, def in pairs(minetest.registered_nodes) do
         in_group = false

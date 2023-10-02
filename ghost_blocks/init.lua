@@ -1,6 +1,6 @@
 local glass_itemstring = "default:glass"
 local center_itemstring = "default:diamond"
-if why.mineclone then
+if why.mcl then
     glass_itemstring = "mcl_core:glass"
     center_itemstring = "mcl_mobitems:ghast_tear"
 end
@@ -75,7 +75,7 @@ function why.ghost_blocks.register_ghost_block(block)
     if block == "mcl_enchanting:table" then
         new_name = "ghost_blocks:enchanting_table"
     elseif block == "mcl_smithing_table:table" then
-        new_name = "ghost_blocks:smithing_table" 
+        new_name = "ghost_blocks:smithing_table"
     end
     if block == "ghost_blocks:ghostifier" then
         return
@@ -106,7 +106,7 @@ function why.ghost_blocks.register_ghost_block(block)
     --block_data.groups.eatable = nil
     --block_data._mcl_saturation = nil
     block_data.after_dig_node = nil --fixes enchanting table duplication
-    if why.mineclone then
+    if why.mcl then
         if new_name == "ghost_blocks:ender_chest" then
             block_data.groups.pickaxey = 1
         end
@@ -127,7 +127,7 @@ end
 
 
 local width = 8
-if why.mineclone then width = 9 end
+if why.mcl then width = 9 end
 
 local ghostifier_formspec =
     "size["..tostring(width)..",7]"..
@@ -140,7 +140,7 @@ local ghostifier_formspec =
     "listring[context;src]"..
     "listring[current_player;main]"
 
-if why.mineclone then
+if why.mcl then
     ghostifier_formspec = ghostifier_formspec..
     mcl_formspec.get_itemslot_bg(1.5,1,1,1)..
     mcl_formspec.get_itemslot_bg(5,1,1,1)
@@ -162,8 +162,6 @@ minetest.register_node("ghost_blocks:ghostifier", {
         if minetest.is_protected(pos, player:get_player_name()) then
             return 0
         end
-        local meta = minetest.get_meta(pos)
-        local inv = meta:get_inventory()
         if listname == "src" then
             return stack:get_count()
         else
@@ -184,7 +182,7 @@ minetest.register_node("ghost_blocks:ghostifier", {
         end
         meta:from_table(meta2)
 	end,
-    
+
      allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
         local meta = minetest.get_meta(pos)
         local inv = meta:get_inventory()
@@ -192,15 +190,13 @@ minetest.register_node("ghost_blocks:ghostifier", {
         if minetest.is_protected(pos, player:get_player_name()) then
             return 0
         end
-        local meta = minetest.get_meta(pos)
-        local inv = meta:get_inventory()
-        if listname == "src" then
+        if to_list == "src" then
             return stack:get_count()
         else
             return 0
         end
     end,
-    
+
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
         if minetest.is_protected(pos, player:get_player_name()) then
             return 0
@@ -212,7 +208,7 @@ minetest.register_node("ghost_blocks:ghostifier", {
         local meta = minetest.get_meta(pos)
         local inv = meta:get_inventory()
         local update = true
-        
+
         while elapsed > 0 and update do
             update = false
             if not inv:is_empty("src") then
@@ -220,36 +216,31 @@ minetest.register_node("ghost_blocks:ghostifier", {
                 local dst_stack = inv:get_stack("dst", 1)
                 local original_itemstring = src_stack:get_name()
                 local new_itemstring = why.ghost_blocks.block_map[original_itemstring]
-                if new_itemstring then
-                    if not inv:is_empty("dst") then
-                        if new_itemstring ~= dst_stack:get_name() then
-                            break --if dst is full of different block
-                        end
+                if new_itemstring and not inv:is_empty("dst") then
+                    if new_itemstring ~= dst_stack:get_name() then
+                        break --if dst is full of different block
                     end
-                    if dst_stack:is_empty() then
-                        -- create a new stack
-                        dst_stack = ItemStack(new_itemstring)
-                        src_stack:set_count(src_stack:get_count() - 1)
-                        --minetest.log("dst is empty, creating new itemstack")
-                    elseif dst_stack:get_count() >= 64 then
-                        --minetest.log("dst is full, stopping")
-                        -- the max item count is limited to 64
-                        break
-                    else
-                        -- add one node into stack
-                        --minetest.log("dst++; src--")
-                        dst_stack:set_count(dst_stack:get_count() + 1)
-                        src_stack:set_count(src_stack:get_count() - 1)
-                    end
-                    --minetest.log("setting src and dst")
-                    inv:set_stack("dst", 1, dst_stack)
-                    inv:set_stack("src", 1, src_stack)
-                    
-                    update = true
                 end
-    
-            else
-                --minetest.log("src is empty")
+                if dst_stack:is_empty() then
+                    -- create a new stack
+                    dst_stack = ItemStack(new_itemstring)
+                    src_stack:set_count(src_stack:get_count() - 1)
+                    --minetest.log("dst is empty, creating new itemstack")
+                elseif dst_stack:get_count() >= 64 then
+                    --minetest.log("dst is full, stopping")
+                    -- the max item count is limited to 64
+                    break
+                else
+                    -- add one node into stack
+                    --minetest.log("dst++; src--")
+                    dst_stack:set_count(dst_stack:get_count() + 1)
+                    src_stack:set_count(src_stack:get_count() - 1)
+                end
+                --minetest.log("setting src and dst")
+                inv:set_stack("dst", 1, dst_stack)
+                inv:set_stack("src", 1, src_stack)
+
+                update = true
             end
         end
         minetest.get_node_timer(pos):stop()
@@ -264,7 +255,7 @@ minetest.register_node("ghost_blocks:ghostifier", {
     on_metadata_inventory_take = function(pos)
         minetest.get_node_timer(pos):start(1.0)
     end,
-    
+
     on_construct = function(pos)
         local meta = minetest.get_meta(pos)
         local inv = meta:get_inventory()

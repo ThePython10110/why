@@ -1,9 +1,9 @@
 local sound_mod = default
 local water_itemstring = "bucket:bucket_water"
 local sticky_block_sounds
-if why.mineclone then
+if why.mcl then
     sound_mod = mcl_sounds
-	local water_itemstring = "mcl_buckets:bucket_water"
+	water_itemstring = "mcl_buckets:bucket_water"
 	sticky_block_sounds = {
 		dug = {name = "slimenodes_dug", gain = 0.6},
 		place = {name = "slimenodes_place", gain = 0.6},
@@ -103,7 +103,7 @@ minetest.register_node("sticky_things:glue_source", {
 	_mcl_hardness = -1,
 })
 
-if why.mineclone then
+if why.mcl then
 	mcl_buckets.register_liquid({
 		source_place = "sticky_things:glue_source",
 		source_take = {"sticky_things:glue_source"},
@@ -125,7 +125,7 @@ minetest.register_craft({
     recipe = {"group:flower", water_itemstring},
 })
 
-if why.mineclone then
+if why.mcl then
 	minetest.register_node("sticky_things:sticky_block", {
 		description = "Sticky Block",
 		_mcl_hardness = 3,
@@ -138,21 +138,19 @@ if why.mineclone then
 			-- who am I?
 			local name = player:get_player_name()
 
-			-- where am I?
-			local pos = player:get_pos()
-
 			-- what is around me?
 			local node_stand = mcl_playerinfo[name].node_stand
 			local node_stand_below = mcl_playerinfo[name].node_stand_below
 
 			-- Standing on sticky block? If so, walk slower
-			if node_stand == "sticky_things:sticky_block" or (node_stand == "air" and node_stand_below == "sticky_things:sticky_block") then
+			if node_stand == "sticky_things:sticky_block"
+			or (node_stand == "air" and node_stand_below == "sticky_things:sticky_block") then
 				playerphysics.add_physics_factor(player, "speed", "mcl_playerplus:surface", 0.05)
 			end
 		end
 	end)
 
- -- if why.mineclone then
+ -- if why.mcl then
 		minetest.register_craft({
 			output = "sticky_things:sticky_block",
 			type = "shapeless",

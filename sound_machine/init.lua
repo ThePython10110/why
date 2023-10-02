@@ -1,7 +1,7 @@
 local sound_mod = default
 local center_itemstring = "wool:black"
 local copper_itemstring = "default:copper_ingot"
-if why.mineclone then
+if why.mcl then
     sound_mod = mcl_sounds
     center_itemstring = "mcl_colorblocks:concrete_black"
     copper_itemstring = "mcl_copper:copper_ingot"
@@ -10,7 +10,7 @@ end
 local sound_machine_context = {}
 
 local sound_machine_buttons
-if why.mineclone then
+if why.mcl then
     sound_machine_buttons = {
         {{sound = "tnt_ignite", name = "Ignite TNT"},                           {sound = "tnt_explode", name = "Explosion"},           {sound = "mcl_bows_bow_shoot", name = "Bow Shot",}},
         {{sound = "mcl_experience_level_up", name = "XP Level Up", gain = 0.6}, {sound = "player_damage", name = "Player Damage"},     {sound = "awards_got_generic", name = "Achievement",}},
@@ -22,7 +22,7 @@ if why.mineclone then
 else
     sound_machine_buttons = {
         {{sound = "tnt_ignite", name = "Ignite TNT"},                           {sound = "tnt_explode", name = "Explosion"},            {sound = "default_break_glass", name = "Breaking Glass",}},
-        {{sound = "default_chest_open", name = "Open Chest"},                   {sound = "default_chest_close", name = "Close Chest"},  {sound = "player_damage", name = "Player Damage",}},     
+        {{sound = "default_chest_open", name = "Open Chest"},                   {sound = "default_chest_close", name = "Close Chest"},  {sound = "player_damage", name = "Player Damage",}},
         {{sound = "default_cool_lava", name = "Lava cooling"},                  {sound = "fire_fire", name = "Fire"},                   {sound = "fire_flint_and_steel", name = "Flint and Steel",}},
         {{sound = "default_tool_breaks", name = "Tool breaking"},               {sound = "default_water_footstep", name = "Water"},     {sound = "doors_fencegate_open", name = "Open Gate",}},
         {{sound = "doors_door_open", name = "Open Door"},                       {sound = "doors_door_close", name = "Close Door"},      {sound = "doors_fencegate_close", name = "Close Gate"}},
@@ -48,7 +48,7 @@ local function generate_formspec(sound_box, pitch)
 end
 
 local function show_portable_formspec(itemstack, player, pointed_thing)
-    if not player:get_player_control().sneak then 
+    if not player:get_player_control().sneak then
         -- Call on_rightclick if the pointed node defines it
         if pointed_thing and pointed_thing.type == "node" then
             local pos = pointed_thing.under
@@ -62,8 +62,8 @@ local function show_portable_formspec(itemstack, player, pointed_thing)
             end
         end
     end
-    local custom_sound = player:get_attribute("sound_machine_custom_sound") or "tnt_ignite"
-    local pitch = player:get_attribute("sound_machine_pitch") or 1.0
+    local custom_sound = player:get_meta():get_string("sound_machine_custom_sound") or "tnt_ignite"
+    local pitch = player:get_meta():get_string("sound_machine_pitch") or 1.0
     local formspec = generate_formspec(custom_sound, pitch)
 
     minetest.show_formspec(player:get_player_name(), "sound_machine_portable_sound_machine", formspec)
@@ -81,12 +81,18 @@ end
 local function sound_machine_play(pos)
     local last_sound = minetest.get_meta(pos):get_string("sound_machine_last_sound")
     --minetest.log(last_sound)
-    local pitch = tonumber(minetest.get_meta(pos):get_string("sound_machine_pitch"))
+    local pitch = tonumber(minetest.get_meta(pos):get_string("sound_machine_pitch") or 1)
     minetest.sound_play({name = last_sound, pitch = pitch}, { pos = pos, max_hear_distance = 20})
 end
 
 minetest.register_tool("sound_machine:portable_sound_machine", {
     description = "Portable Sound Machine",
+    on_use = function(itemstack, player, pointed_thing)
+        local pitch = tonumber(player:get_meta():get_string("sound_machine_pitch") or 1)
+        local sound = player:get_meta():get_string("sound_machine_custom_sound") or "tnt_ignite"
+        minetest.sound_play({name = sound, pitch = pitch}, {pos = player:get_pos(), max_hear_distance = 20})
+        player:get_meta():set_string("sound_machine_custom_sound", sound)
+    end,
     on_place = show_portable_formspec,
     on_secondary_use = show_portable_formspec,
     inventory_image = "sound_machine_sound_machine.png",
@@ -130,24 +136,27 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
         if fields.quit then return end
 
         local player_pos = player:get_pos()
-        
+
         if (fields.key_enter_field == "pitch" or fields.pitch_button) and fields.pitch then
             if tonumber(fields.pitch) then
-                player:set_attribute("sound_machine_pitch", fields.pitch)
+                player:get_meta():set_string("sound_machine_pitch", fields.pitch)
             end
         end
 
         if (fields.key_enter_field == "custom_sound" or fields.custom_sound_button) and fields.custom_sound then
-                local pitch = tonumber(player:get_attribute("sound_machine_pitch")) or 1
+                local pitch = tonumber(player:get_meta():get_string("sound_machine_pitch") or 1)
             minetest.sound_play({name = fields.custom_sound, pitch = pitch}, {pos = player_pos, max_hear_distance = 20})
-            player:set_attribute("sound_machine_custom_sound", fields.custom_sound)
+            player:get_meta():set_string("sound_machine_custom_sound", fields.custom_sound)
+            show_portable_formspec(nil, player)
         end
         for field, data in pairs(fields) do
-            local _, _, row, column = string.find(field, "^(%d+)_(%d+)$")
+            local _, _, row, column = string.find(field, "^(%d+)_(%d+)$") -- 2 numbers separated by an underscore (and nothing else)
             if row and column then
                 local sound_data = sound_machine_buttons[tonumber(row)][tonumber(column)]
-                local pitch = tonumber(player:get_attribute("sound_machine_pitch")) or 1
+                local pitch = tonumber(player:get_meta():get_string("sound_machine_pitch") or 1)
                 minetest.sound_play({name = sound_data.sound, gain = sound_data.gain, pitch = pitch}, { pos = player_pos, max_hear_distance = 20})
+                player:get_meta():set_string("sound_machine_custom_sound", sound_data.sound)
+                show_portable_formspec(nil, player)
                 return
             end
         end
@@ -171,14 +180,15 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
                     minetest.get_meta(pos):set_string("sound_machine_last_sound", fields.custom_sound)
                 end
                 sound_machine_play(pos)
+                show_sound_machine_formspec(pos, nil, player)
             end
             for field, data in pairs(fields) do
-                local _, _, row, column = string.find(field, "^(%d+)_(%d+)$")
+                local _, _, row, column = string.find(field, "^(%d+)_(%d+)$") -- 2 numbers separated by an underscore (and nothing else)
                 if row and column then
                     local sound_data = sound_machine_buttons[tonumber(row)][tonumber(column)]
-                    local pitch = tonumber(minetest.get_meta(pos):get_string("sound_machine_pitch")) or 1
                     minetest.get_meta(pos):set_string("sound_machine_last_sound", sound_data.sound)
                     sound_machine_play(pos)
+                    show_sound_machine_formspec(pos, nil, player)
                     return
                 end
             end

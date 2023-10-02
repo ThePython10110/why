@@ -1,7 +1,9 @@
 why = {}
 
-why.mineclone = minetest.get_modpath("mcl_core")
+why.mcl = minetest.get_modpath("mcl_core")
+why.mineclonia = minetest.get_game_info().id == "mineclonia"
 
+-- All Why mods that add items/nodes should be in this list.
 local mod_list = {
     "fake_liquids",
     "flying_sausage",
@@ -18,8 +20,8 @@ local mod_list = {
 }
 
 function why.inventory_formspec(x,y)
-    local formspec = ""
-    if why.mineclone then
+    local formspec
+    if why.mcl then
         formspec = "list[current_player;main;"..tostring(x)..","..tostring(y)..";9,3;9]"..
             mcl_formspec.get_itemslot_bg(x,y,9,3)..
             "list[current_player;main;"..tostring(x)..","..tostring(y+3.25)..";9,1]"..
@@ -31,7 +33,7 @@ function why.inventory_formspec(x,y)
     return formspec
 end
 
-if why.mineclone then
+if why.mcl then
     for _, mod in ipairs(mod_list) do
         mcl_item_id.set_mod_namespace(mod, "why")
     end

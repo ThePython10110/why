@@ -21,6 +21,9 @@ All code in this modpack is licensed under GPLv3+. All burnt meat textures, besi
 ### Fake Liquids
 A mod that adds solid liquid blocks. They can be crafted by placing glass to the left, right, and bottom of the filled bucket (basically making a glass bottle with the bucket inside). Also adds fake lava and fake water (which look identical but their functions are swapped). To craft them, brew lava, water, or river water buckets with fermented spider eyes (in Minetest Game, craft the bucket with a Mese crystal).
 
+### Falling Block Tool
+Adds a tool crafted with sticks, sand, and gravel that can make any breakable block/node fall by right-clicking on it.
+
 ### Flying Sausage*
 Adds Cooked Elytras and Burnt Elytras (both incredibly good foods), as well as a Flying Sausage (an even better food, crafted by surrounding a Burnt Elytra with Burnt Sausage Blocks). Crafting a Flight Stomach Accessor (by mixing a chest and a burnt sausage) and putting a Flying Sausage into it will grant you the `fly` privilege. The Flying Sausage will remain in your Flight Stomach even if you get rid of the Flight Stomach Accessor or die.
 
@@ -32,15 +35,15 @@ A mod that creates Ghost Blocks, effectively normal blocks with no collision. Th
 
 <details><summary>More details</summary>
 
-MineClone's chests, ender chests, shulker boxes, item frames, beacons, grindstones, anvils, barrels, brewing stands, furnaces (any type), hoppers, and probably other items don't work normally as ghost blocks. Armor stands work, but the armor is not shown. Anvils still fall, break items, and damage players/mobs. Beehives and bee nests probably don't work, but I don't know how to test them. Jukeboxes *work*, but it's impossible to get music discs back from them, even by breaking them.
+MineClone's chests, ender chests, shulker boxes, item frames, beacons, grindstones, anvils, barrels, brewing stands, furnaces (any type), hoppers, and probably other items don't work normally as ghost blocks. Armor stands work, but the armor is not shown. Anvils still fall, break items, and damage players/mobs. Beehives and bee nests probably don't work, but I don't know how to test them. Jukeboxes *work* (they play discs you put in them), but it's impossible to get music discs back from them, even by breaking them.
 
-Anything with multiple states (buttons, doors, trapdoors, observers, powered rails, command blocks, etc.) or multiple blocks (beds, doors, etc.) will not work correctly, instead turning into the "real" version when changed. Anything that can turn into another block will do so. In other words, stripping a ghost log will turn it into a normal (non-stripped) log.
+Anything with multiple states (buttons, doors, trapdoors, observers, powered rails, furnaces, Minetest's chests, etc.) or multiple blocks (beds, doors, etc.) will not work correctly, instead turning into the "real" version when changed. Anything that can turn into another block will do so. In other words, stripping a ghost log will turn it into a normal (stripped) log.
 
 Ghost scaffolding instantly turns into normal scaffolding when placed.
 
-Most blocks should still be usable in *group* crafting recipes (since I'm not overriding most groups), meaning that ghost cobble will still be usable in any crafting recipe that uses group:cobble (such as furnaces/tools).
+Probably a bunch of other things I haven't tested.
 
-If you want to see inside the ghost blocks, use third-person view. As long as the camera is inside a ghost block, you should be able to see through them. This makes ghost blocks double as x-ray blocks.
+Most blocks should still be usable in *group* crafting recipes (since I'm not overriding most groups), meaning that ghost cobble will still be usable in any crafting recipe that uses group:cobble (such as furnaces/tools).
 
 </details>
 
@@ -48,19 +51,24 @@ If you want to see inside the ghost blocks, use third-person view. As long as th
 Adds a lava sponge to MineClone. Lava sponges act exactly like normal sponges, but soak up lava instead of water. To return them to un-lava-logged sponges, use them as fuel in a furnace. They are completely safe to touch when lava-logged, mostly because I'm lazy. To craft a lava sponge, surround a regular sponge with netherrack.
 
 ### Meat Blocks*
-Adds craftable, cookable, edible meat blocks to MineClone. Also adds burnt meat and sausage. Eating burnt meat sets you on fire. You can craft a meat block with any kind of meat (besides tropical fish/clownfish and pufferfish) simply by placing that meat in a 3x3 square. You can cook raw meat blocks to get cooked ones, and cooked ones to get burnt ones.
+Adds craftable, cookable, edible meat blocks to MineClone. Also adds burnt meat and sausage. Eating burnt meat sets you on fire. You can craft a meat block with any kind of meat (besides tropical fish/clownfish and pufferfish) simply by placing that meat in a 3x3 square. You can cook raw meat blocks to get cooked ones, and cooked ones to get burnt ones. Raw cod blocks are flammable because they are.
 
 ### Slime Things*
 Adds slime slabs, stairs, pressure plates, and buttons.
 
 ### Small "Why?" Things**
-A few of small additions: glowing sunflowers, bouncy wool, completely useless blue feathers, and craftable barriers. The barriers are crafted by surrounding obsidian with glass, and the blue feathers are crafted by combining feathers and blue dye. Minetest Game does not have sunflowers or feathers, so these features don't exist.
+A few small additions:
+* Sunflowers glow (MCL)
+* Wool is bouncy (but intentionally does *not* block fall damage)
+* You can craft blue feathers with blue dye and feathers (MCL).
+* Papyrus/sugar cane, cactus, and bamboo (MCL) now have no height limit.
+* There are craftable barriers that are breakable (same hardness as obsidian). The barriers are crafted by surrounding obsidian with glass.
 
 ### Sound Machine
-Adds a block that can create any sound in the game (with a few buttons for presets and pitch controls). It will play the sound when a button in the formspec is clicked, when the block is punched, or when it is powered by a redstone signal. It can be crafted by placing copper ingots around black concrete (or black wool in Minetest Game). Also adds a Portable Sound Machine, an item (not a block) that opens the same formspec.
+Adds a block that can create any sound in the game (with a few buttons for presets and pitch controls). It will play the sound when a button in the formspec is clicked, when the block is punched, or when it is powered by a redstone signal. It can be crafted by placing copper ingots around black concrete (or black wool in Minetest Game). Also adds a Portable Sound Machine, an item (not a block) that opens the same formspec when right-clicking and plays the last sound when left-clicking.
 
 ### Sticky Things**
-Adds glue and sticky blocks, which slow down players. Craft glue by combining a flower with a water bucket (a quick Google search said that one common recipe for glue was flour and water, and... pun). Craft sticky blocks mixing soul sand and ice. Sticky blocks depend on a mod included in MineClone, and are therefore not in Minetest Game.
+Adds glue and sticky blocks, which slow down players. Craft glue by combining a flower with a water bucket (a quick Google search said that one common recipe for glue was flour and water, and... pun). Craft sticky blocks mixing soul sand and ice. Sticky blocks depend on a mod included in MCL, and are therefore not in Minetest Game.
 
 ### Useless Beans
 Beans... that are useless. They grow everywhere. Annoy everyone by filling their inventories with useless beans! For added irritation, you can put one useless bean into a crafting table and get 64. Craft useless bean tools, smelt them into beangots (useless bean ingots), flood the world with useless bean liquid, and more!
@@ -174,7 +182,7 @@ You can craft an elytra with meat blocks. Just put diamond blocks in the corners
 * Lava Sponge:
     * You can now combine an empty bucket with a lavalogged sponge to transfer the lava to the bucket.
 * Meat Blocks:
-    * The setting has been changed from "x meatballs spawn every second" to "1 meatball spawns every x seconds," (x can be a decimal) because there were too many.
+    * The setting has been changed from "x meatballs spawn every second per player" to "1 meatball spawns every x seconds per player," (x can be a decimal) because there were too many.
 * Ghost Blocks:
     * Ghost Blocks can now be unghostified by putting them back into the Ghostifier.
 ### 5.1
@@ -184,4 +192,19 @@ You can craft an elytra with meat blocks. Just put diamond blocks in the corners
 ### 5.2
 * Fake Liquids:
     * [MineClone] Attempting to brew fake liquids no longer crashes the server.
-    * This crash has probably happened since 3.0, when there were so many changes (adding MTG compatibility) that I didn't test everything.
+    * This crash has probably happened since 3.0, when there were so many changes (since I added MTG compatibility) that I didn't test everything.
+### 6.0
+* Why now supports Mineclonia.
+* `why.mineclone` changed to `why.mcl` (not a notable change unless for some reason you made a mod that depends on it).
+* Added Falling Block Tool
+    * Can make any breakable block/node fall (like sand) by right clicking on it.
+* Meat Blocks
+    * Raw Fish Blocks (cod, not salmon) are now flammable. Why? Because Why.
+* Small Why Things
+    * Fixed an issue where craftable barriers caused regular barriers to also display as yellow.
+    * Cactus, Sugar Cane/Papyrus, and Bamboo now have no height limit.
+* Sound Machine
+    * The portable sound machine now plays the selected sound on left click.
+    * Both versions now refresh the formspec when selecting a sound (so the "custom sound" field displays correctly)
+* Sticky Things
+    * Fixed a potential issue with the glue crafting recipe in MineClone
