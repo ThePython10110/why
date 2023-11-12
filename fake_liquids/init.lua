@@ -446,7 +446,7 @@ if why.mcl then
 				return fake_liquid_recipes[pot]
 			end
 		end
-		old_alchemy(ingr, pot)
+		return old_alchemy(ingr, pot)
 	end
 else
 	for liquid, fake_liquid in pairs(fake_liquid_recipes) do
