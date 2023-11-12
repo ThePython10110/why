@@ -213,3 +213,5 @@ You can craft an elytra with meat blocks. Just put diamond blocks in the corners
     * Both versions now refresh the formspec when selecting a sound (so the "custom sound" field displays correctly)
 * Sticky Things
     * Fixed a potential issue with the glue crafting recipe in MineClone
+### 6.1
+* Fixed a bug with brewing (thanks @jiffygist!)
