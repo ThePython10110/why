@@ -1,8 +1,6 @@
-local sound_mod = default
 local center_itemstring = "wool:black"
 local copper_itemstring = "default:copper_ingot"
 if why.mcl then
-    sound_mod = mcl_sounds
     center_itemstring = "mcl_colorblocks:concrete_black"
     copper_itemstring = "mcl_copper:copper_ingot"
 end
@@ -115,7 +113,7 @@ minetest.register_node("sound_machine:sound_machine", {
 	on_punch = function(pos, node) -- play current sound when punched
 		sound_machine_play(pos)
 	end,
-	sounds = sound_mod.node_sound_wood_defaults(),
+	sounds = why.sound_mod.node_sound_wood_defaults(),
 	mesecons = {effector = { -- play sound when activated
 		action_on = function(pos, node)
 			sound_machine_play(pos)

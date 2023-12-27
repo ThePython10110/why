@@ -146,18 +146,57 @@ if why.mcl then
     mcl_formspec.get_itemslot_bg(5,1,1,1)
 end
 
+local function ghostifier_action(pos, player)
+    local meta = minetest.get_meta(pos)
+    local inv = meta:get_inventory()
+    if not inv:is_empty("src") then
+        local src_stack = inv:get_stack("src", 1)
+        local dst_stack = inv:get_stack("dst", 1)
+        local original_itemstring = src_stack:get_name()
+        local new_itemstring
+        if original_itemstring == "ghost_blocks:ghostifier" then
+            new_itemstring = ""
+        else
+            new_itemstring = why.ghost_blocks.block_map[original_itemstring]
+            minetest.log(dump(new_itemstring))
+            if (not new_itemstring) or new_itemstring == "" then return end
+        end
+        if not inv:is_empty("dst") then
+            if new_itemstring ~= dst_stack:get_name() then
+                return --if dst is full of different block
+            end
+        end
+        local added_amount
+        if original_itemstring == "ghost_blocks:ghostifier" then
+            added_amount = src_stack:get_count()
+            if awards and player then
+                awards.unlock(player:get_player_name(), "why:nope")
+            end
+        else
+            added_amount = src_stack:get_count() - inv:add_item("dst", ItemStack(new_itemstring.." "..tostring(src_stack:get_count()))):get_count()
+        end
+        src_stack:set_count(src_stack:get_count() - added_amount)
+        if src_stack:get_count() == 0 then src_stack = ItemStack("") end
+        inv:set_stack("src", 1, src_stack)
+    end
+end
+
+local level
+if not why.mcl then level = 4 end
+
 minetest.register_node("ghost_blocks:ghostifier", {
     description = "Ghostifier",
     inventory_image = "[inventorycube{ghost_blocks_ghostifier.png{ghost_blocks_ghostifier.png{ghost_blocks_ghostifier.png",
     wield_image = "[inventorycube{ghost_blocks_ghostifier.png{ghost_blocks_ghostifier.png{ghost_blocks_ghostifier.png",
-    hardness = 10,
+    _mcl_hardness = 1.5,
+    _mcl_blast_resistance = 6,
     walkable = false,
     use_texture_alpha = "blend",
     sunlight_propagates = true,
     paramtype = "light",
     drawtype = "allfaces",
     tiles = {"ghost_blocks_ghostifier.png"},
-    groups = {ghost_block = 1, pickaxey = 1, cracky = 1},
+    groups = {ghost_block = 1, pickaxey = 1, cracky = 1, container = 4, level = level},
     allow_metadata_inventory_put = function(pos, listname, index, stack, player)
         if minetest.is_protected(pos, player:get_player_name()) then
             return 0
@@ -204,56 +243,16 @@ minetest.register_node("ghost_blocks:ghostifier", {
         return stack:get_count()
     end,
 
-    on_timer = function(pos, elapsed)
-        local meta = minetest.get_meta(pos)
-        local inv = meta:get_inventory()
-        local update = true
+    on_timer = ghostifier_action,
 
-        while elapsed > 0 and update do
-            update = false
-            if not inv:is_empty("src") then
-                local src_stack = inv:get_stack("src", 1)
-                local dst_stack = inv:get_stack("dst", 1)
-                local original_itemstring = src_stack:get_name()
-                local new_itemstring = why.ghost_blocks.block_map[original_itemstring]
-                if new_itemstring and not inv:is_empty("dst") then
-                    if new_itemstring ~= dst_stack:get_name() then
-                        break --if dst is full of different block
-                    end
-                end
-                if dst_stack:is_empty() then
-                    -- create a new stack
-                    dst_stack = ItemStack(new_itemstring)
-                    src_stack:set_count(src_stack:get_count() - 1)
-                    --minetest.log("dst is empty, creating new itemstack")
-                elseif dst_stack:get_count() >= 64 then
-                    --minetest.log("dst is full, stopping")
-                    -- the max item count is limited to 64
-                    break
-                else
-                    -- add one node into stack
-                    --minetest.log("dst++; src--")
-                    dst_stack:set_count(dst_stack:get_count() + 1)
-                    src_stack:set_count(src_stack:get_count() - 1)
-                end
-                --minetest.log("setting src and dst")
-                inv:set_stack("dst", 1, dst_stack)
-                inv:set_stack("src", 1, src_stack)
-
-                update = true
-            end
-        end
-        minetest.get_node_timer(pos):stop()
-        return false
+    on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+        ghostifier_action(pos, player)
     end,
-    on_metadata_inventory_move = function(pos)
-        minetest.get_node_timer(pos):start(1.0)
+    on_metadata_inventory_put = function(pos, listname, index, stack, player)
+        ghostifier_action(pos, player)
     end,
-    on_metadata_inventory_put = function(pos)
-        minetest.get_node_timer(pos):start(1.0)
-    end,
-    on_metadata_inventory_take = function(pos)
-        minetest.get_node_timer(pos):start(1.0)
+    on_metadata_inventory_take = function(pos, listname, index, stack, player)
+        ghostifier_action(pos, player)
     end,
 
     on_construct = function(pos)
@@ -289,4 +288,15 @@ for _, group in ipairs(why.ghost_blocks.group_list) do --Register all blocks in 
     for _, block in pairs(grouped_items[group]) do
         why.ghost_blocks.register_ghost_block(block)
     end
+end
+
+if awards then
+    awards.register_achievement("why:nope", {
+        title = "Nope. It's gone now.",
+        description = "Attempt to ghostify a ghostifier.",
+        icon = "[inventorycube{ghost_blocks_ghostifier.png{ghost_blocks_ghostifier.png{ghost_blocks_ghostifier.png",
+        type = "Advancement",
+        group = "Why",
+        secret = true
+    })
 end

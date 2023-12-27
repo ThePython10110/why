@@ -145,3 +145,20 @@ minetest.override_item("mesecons_button:button_slimeblock_on", {
     use_texture_alpha = "blend",
 })
 end
+
+if awards then
+    awards.register_achievement("why:fourteen", {
+        title = "Fourteen seconds of waiting",
+        description = "Press a slime button",
+        icon = "mcl_core_slime.png",
+        type = "Advancement",
+        group = "Why"
+    })
+    local old_function = minetest.registered_items["mesecons_button:button_slimeblock_off"].on_rightclick
+    minetest.override_item("mesecons_button:button_slimeblock_off", {
+        on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+            awards.unlock(player:get_player_name(), "why:fourteen")
+            return old_function(pos, node, player, itemstack, pointed_thing)
+        end
+    })
+end

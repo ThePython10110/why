@@ -179,12 +179,34 @@ minetest.register_craft({
     recipe = {"mcl_chests:chest", "meat_blocks:burnt_sausage"}
 })
 
+local function sausage_function(itemstack, player, pointed_thing)
+    if not player:get_player_control().sneak then
+        -- Call on_rightclick if the pointed node defines it
+        if pointed_thing and pointed_thing.type == "node" then
+            local pos = pointed_thing.under
+            local node = minetest.get_node(pos)
+            if player and not player:get_player_control().sneak then
+                local nodedef = minetest.registered_nodes[node.name]
+                local on_rightclick = nodedef and nodedef.on_rightclick
+                if on_rightclick then
+                    return on_rightclick(pos, node, player, itemstack, pointed_thing) or itemstack
+                end
+            end
+        end
+    end
+    if awards then
+        awards.unlock(player:get_player_name(), "why:wurst")
+    end
+    local eat_func = minetest.item_eat(9999999999999999)
+    return eat_func(itemstack, player, pointed_thing)
+end
+
 minetest.register_tool("flying_sausage:flying_sausage", {
     description = "Flying Sausage\nYes, it looks exactly like a normal cooked sausage.\nDon't get them mixed up.",
     wield_image = "meat_blocks_sausage_cooked.png",
     inventory_image = "meat_blocks_sausage_cooked.png",
-    on_place = minetest.item_eat(9999999999999999), -- You'll be fed as long as Chell was in suspension...
-    on_secondary_use = minetest.item_eat(9999999999999999), -- Except for some reason it rounds to 10^??? :(
+    on_place = sausage_function, -- You'll be fed as long as Chell was in suspension...
+    on_secondary_use = sausage_function, -- Except for some reason it rounds to 10^??? :(
     _mcl_saturation = 9999999999999999,
 })
 
@@ -195,6 +217,14 @@ minetest.register_craft({
         {"meat_blocks:burnt_block_sausage", "flying_sausage:burnt_elytra", "meat_blocks:burnt_block_sausage"},
         {"meat_blocks:burnt_block_sausage", "meat_blocks:burnt_block_sausage", "meat_blocks:burnt_block_sausage"},
     }
+})
+
+awards.register_achievement("why:wurst", {
+    title = "Wurst Misteak Possible",
+    description = "Eat a Flying Sausage",
+    icon = "meat_blocks_sausage_cooked.png",
+    type = "Advancement",
+    group = "Why",
 })
 
 

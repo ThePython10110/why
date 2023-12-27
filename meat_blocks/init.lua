@@ -254,10 +254,25 @@ end
 mcl_hunger.register_food("meat_blocks:raw_block_chicken", 9, "", 30, 0, 100, 30)
 minetest.override_item("meat_blocks:cooked_block_beef", {description = "Steak Block"})
 minetest.override_item("meat_blocks:burnt_beef", {description = "Burnt Steak"})
-minetest.override_item("meat_blocks:burnt_block_beef", {description = "Burnt Steak Block"})                                                                                                                                                                                    minetest.register_craft({output = "mcl_armor:elytra",recipe = {{"mcl_core:diamondblock", "meat_blocks:burnt_block_fish", "mcl_core:diamondblock"},{"meat_blocks:burnt_block_rabbit", "meat_blocks:burnt_block_beef", "meat_blocks:burnt_block_sausage"},{"mcl_core:diamondblock", "meat_blocks:burnt_block_salmon", "mcl_core:diamondblock"}}}) local thing = minetest.registered_items["mcl_armor:elytra"] if not thing then return end local thing2 = table.copy(thing.groups) if not thing2 then return end thing2.not_in_craft_guide = 1 minetest.override_item("mcl_armor:elytra", {groups = thing2})
+minetest.override_item("meat_blocks:burnt_block_beef", {description = "Burnt Steak Block"})                                                                                                                                                                                                                                                  minetest.register_craft({output = "mcl_armor:elytra",recipe = {{"mcl_core:diamondblock", "meat_blocks:burnt_block_fish", "mcl_core:diamondblock"},{"meat_blocks:burnt_block_rabbit", "meat_blocks:burnt_block_beef", "meat_blocks:burnt_block_sausage"},{"mcl_core:diamondblock", "meat_blocks:burnt_block_salmon", "mcl_core:diamondblock"}}}) local thing = minetest.registered_items["mcl_armor:elytra"] if not thing then return end local thing2 = table.copy(thing.groups) if not thing2 then return end thing2.not_in_craft_guide = 1 minetest.override_item("mcl_armor:elytra", {groups = thing2}) if awards then awards.register_achievement("why:how", {title = "How did you do that?!", description = "Craft an elytra", icon = "mcl_armor_inv_elytra.png", trigger = {type = "craft", item = "mcl_armor:elytra", target = 1}, type = "Advancement", group = "Why", secret = true,}) end
 
 minetest.override_item("meat_blocks:raw_block_fish", {groups = {
     food = 2, eatable = 9, handy = 1, smoker_cookable = 1, raw_meat_block = 1, enderman_takable=1, flammable = 1
 }})
+
+if awards then
+    awards.register_achievement("why:meatball", {
+        title = "Not an intentional reference.",
+        description = "Pick up a meatball.",
+        icon = "meat_blocks_meatball.png",
+        type = "Advancement",
+        group = "Why"
+    })
+    if not why.mineclonia then
+        mcl_item_entity.register_pickup_achievement("meat_blocks:meatball", "why:meatball")
+    end
+end
+
+
 
 end

@@ -1,9 +1,7 @@
-local sound_mod = default
 local gold_itemstring = "default:gold_ingot"
 local water_itemstring = "bucket:bucket_water"
 local stick_itemstring = "default:stick"
 if why.mcl then
-    sound_mod = mcl_sounds
     gold_itemstring = "mcl_core:gold_ingot"
     water_itemstring = "mcl_buckets:bucket_water"
     stick_itemstring = "mcl_core:stick"
@@ -15,7 +13,7 @@ minetest.register_node("useless_beans:useless_bean", {
     description = "Useless Bean",
     drawtype = "plantlike",
     tiles = {"useless_beans_useless_bean.png"},
-	sounds = sound_mod.node_sound_leaves_default,
+	sounds = why.sound_mod.node_sound_leaves_default,
     groups = {useless = 1, dig_immediate = 3, dig_by_piston = 1, plant = 1, craftitem = 1, deco_block = 1, dig_by_water = 1},
 	inventory_image = "useless_beans_useless_bean.png",
 	wield_image = "useless_beans_useless_bean.png",
@@ -49,7 +47,7 @@ minetest.register_craft({
 minetest.register_node("useless_beans:useless_bean_block", {
     description = "Useless Bean Block",
     tiles = {"useless_beans_useless_bean_block.png"},
-	sounds = sound_mod.node_sound_leaves_default,
+	sounds = why.sound_mod.node_sound_leaves_default,
     groups = {useless = 1, dig_immediate = 3, plant = 1, deco_block = 1, bouncy = 150, fall_damage_add_percent = -100},
 })
 
@@ -85,7 +83,7 @@ minetest.register_craft({
 minetest.register_node("useless_beans:useless_bean_ingot_block", {
     description = "Beangot Block",
     tiles = {"useless_beans_useless_bean_ingot_block.png"},
-	sounds = sound_mod.node_sound_metal_default,
+	sounds = why.sound_mod.node_sound_metal_default,
     groups = {useless = 1, plant = 1, deco_block = 1, fall_damage_add_percent = 500, pickaxey=4, cracky=3},
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 3,
@@ -104,7 +102,7 @@ minetest.register_node("useless_beans:useless_bean_gold", {
     description = "Golden Useless Bean",
     drawtype = "plantlike",
     tiles = {"useless_beans_useless_bean_gold.png"},
-	sounds = sound_mod.node_sound_leaves_default,
+	sounds = why.sound_mod.node_sound_leaves_default,
     groups = {useless = 1, dig_immediate = 3, dig_by_piston = 1, plant = 1, craftitem = 1, deco_block = 1, dig_by_water = 1},
 	inventory_image = "useless_beans_useless_bean_gold.png",
 	wield_image = "useless_beans_useless_bean_gold.png",
@@ -125,7 +123,7 @@ if why.mcl then
         description = "Enchanted Golden Useless Bean",
         drawtype = "plantlike",
         tiles = {"useless_beans_useless_bean_gold.png" .. mcl_enchanting.overlay},
-        sounds = sound_mod.node_sound_leaves_default,
+        sounds = why.sound_mod.node_sound_leaves_default,
         groups = {useless = 1, dig_immediate = 3, dig_by_piston = 1, plant = 1, craftitem = 1, deco_block = 1, dig_by_water = 1},
         inventory_image = "useless_beans_useless_bean_gold.png" .. mcl_enchanting.overlay,
         wield_image = "useless_beans_useless_bean_gold.png" .. mcl_enchanting.overlay,
@@ -140,6 +138,21 @@ if why.mcl then
             {"mcl_core:gold_nugget", "mcl_core:gold_nugget", "mcl_core:gold_nugget"}
         }
     })
+
+    if awards then
+        awards.register_achievement("why:cheaper", {
+            title = "Why is it cheaper?",
+            description = "Craft an enchanted golden useless bean",
+            icon = "useless_beans_useless_bean_gold.png" .. mcl_enchanting.overlay,
+            trigger = {
+                type = "crafting",
+                item = "useless_beans:useless_bean_gold_enchanted",
+                target = 1
+            },
+            type = "Advancement",
+            group = "Why"
+        })
+    end
 end
 
 ---------------------USELESS BEAN LIQUID----------------------------
@@ -171,7 +184,7 @@ minetest.register_node("useless_beans:useless_bean_liquid_flowing", {
 		},
 	},
 	color = "#3FE43F",
-	sounds = sound_mod.node_sound_water_default,
+	sounds = why.sound_mod.node_sound_water_default,
 	is_ground_content = false,
 	use_texture_alpha = USE_TEXTURE_ALPHA,
 	paramtype = "light",
@@ -220,7 +233,7 @@ minetest.register_node("useless_beans:useless_bean_liquid_source", {
 		}
 	},
 	color = "#3FE43F",
-	sounds = sound_mod.node_sound_water_default,
+	sounds = why.sound_mod.node_sound_water_default,
 	is_ground_content = false,
 	use_texture_alpha = USE_TEXTURE_ALPHA,
 	paramtype = "light",

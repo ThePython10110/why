@@ -224,3 +224,141 @@ else
 		return true
 	end
 end
+
+local bucket_itemstring = (why.mcl and "mcl_buckets:bucket_empty") or "bucket:bucket_empty"
+
+---------------------NEW ACHIEVEMENTS-----------------------
+if awards then
+	awards.register_achievement("why:bucket", {
+		title = "A sense of calm and ease",
+		description = "Create a bucket to be your companion in this stressful world",
+		icon = "bucket.png",
+		trigger = {
+			type = "craft",
+			item = bucket_itemstring,
+			target = 1
+		},
+		type = "Advancement",
+		group = "Why",
+	})
+	if why.mcl then
+		awards.register_achievement("why:frogs", {
+			title = "Now they'll never add frogs",
+			description = "Break a lily pad.",
+			icon = "flowers_waterlily.png",
+			trigger = {
+				type = "dig",
+				item = "mcl_flowers:waterlily",
+				target = 1
+			},
+			type = "Advancement",
+			group = "Why",
+			secret = true
+		})
+		awards.register_achievement("why:cocoa", {
+			title = "Tastes terrible.",
+			description = "Eat cocoa beans by themselves",
+			icon = "mcl_cocoas_cocoa_beans.png",
+			trigger = {
+				type = "eat",
+				item = "mcl_cocoas:cocoa_beans",
+				target = 1
+			},
+			type = "Advancement",
+			group = "Why",
+		})
+		local old_cocoa_function = minetest.registered_items["mcl_cocoas:cocoa_beans"].on_place
+		local eat_function = minetest.item_eat(1)
+		minetest.override_item("mcl_cocoas:cocoa_beans", {
+			groups = {craftitem = 1, compostability = 65, food = 1, eatable = 1},
+			_mcl_saturation = 0,
+			on_secondary_use = eat_function,
+			on_place = function(itemstack, player, pointed_thing)
+				local result = old_cocoa_function(itemstack, player, pointed_thing)
+				if result == itemstack or result == nil then
+					return eat_function(itemstack, player, pointed_thing)
+				else
+					return result
+				end
+			end,
+		})
+		awards.register_achievement("why:larry", {
+			title = "Briny Larry",
+			description = "Collect a sea pickle",
+			icon = "mcl_ocean_sea_pickle_item.png",
+			type = "Advancement",
+			group = "Why",
+		})
+		awards.register_achievement("why:n", {
+			title = "n",
+			description = "Throw an egg",
+			icon = "mobs_chicken_egg.png",
+			type = "Advancement",
+			group = "Why",
+		})
+		awards.register_achievement("why:looks_nice", {
+			title = "Looks nice, but why is it an achievement?",
+			description = "Place light blue terracotta next to cherry leaves (or vice versa)",
+			icon = "hardened_clay_stained_light_blue.png",
+			type = "Advancement",
+			group = "Why",
+		})
+		local old_egg_function = minetest.registered_items["mcl_throwing:egg"].on_use
+		minetest.override_item("mcl_throwing:egg", {
+			on_use = function(itemstack, player, pointed_thing)
+				awards.unlock(player:get_player_name(), "why:n")
+				return old_egg_function(itemstack, player, pointed_thing)
+			end
+		})
+		local check_nodes = { --not necessary but easier
+			{x=-1,y=0,z=0},
+			{x=1,y=0,z=0},
+			{x=0,y=-1,z=0},
+			{x=0,y=1,z=0},
+			{x=0,y=0,z=-1},
+			{x=0,y=0,z=1},
+		}
+		local function check_looks_nice(pos)
+			local target
+			local node = minetest.get_node(pos)
+			if node.name == "mcl_cherry_blossom:cherryleaves" then
+				target = "mcl_colorblocks:hardened_clay_light_blue"
+			elseif node.name == "mcl_colorblocks:hardened_clay_light_blue" then
+				target = "mcl_cherry_blossom:cherryleaves"
+			else
+				return
+			end
+			for _, rel_pos in ipairs(check_nodes) do
+				local new_pos = vector.add(pos, rel_pos)
+				if minetest.get_node(new_pos).name == target then
+					return true
+				end
+			end
+			return false
+		end
+		for _, node in ipairs({"mcl_cherry_blossom:cherryleaves", "mcl_colorblocks:hardened_clay_light_blue"}) do
+			minetest.override_item(node, {
+				after_place_node = function(pos, player, itemstack, pointed_thing)
+					if check_looks_nice(pos) then
+						awards.unlock(player:get_player_name(), "why:looks_nice")
+					end
+				end
+			})
+		end
+		if not why.mineclonia then -- panes aren't invisible in Mineclonia, and mcl_item_entity is LOCAL........
+			mcl_item_entity.register_pickup_achievement("mcl_ocean:sea_pickle_1_dead_brain_coral_block", "why:larry")
+			awards.register_achievement("why:clear", {
+				title = "Clearly invisible",
+				description = "Craft light gray stained glass panes.",
+				icon = "blank.png",
+				trigger = {
+					type = "craft",
+					item = "xpanes:pane_silver_flat",
+					target = 1
+				},
+				type = "Advancement",
+				group = "Why",
+			})
+		end
+	end
+end

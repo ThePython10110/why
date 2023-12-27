@@ -1,9 +1,7 @@
-local sound_mod = default
 local gold_itemstring = "default:gold_ingot"
 local water_itemstring = "bucket:bucket_water"
 local stick_itemstring = "default:stick"
 if why.mcl then
-    sound_mod = mcl_sounds
     gold_itemstring = "mcl_core:gold_ingot"
     water_itemstring = "mcl_buckets:bucket_water"
     stick_itemstring = "mcl_core:stick"
@@ -15,7 +13,7 @@ minetest.register_node("useful_green_potatoes:useful_green_potato", {
     description = "Useful Green Potato",
     drawtype = "plantlike",
     tiles = {"useless_beans_useless_bean.png"},
-	sounds = sound_mod.node_sound_leaves_default,
+	sounds = why.sound_mod.node_sound_leaves_default,
     groups = {dig_immediate = 3, dig_by_piston = 1, plant = 1, craftitem = 1, dig_by_water = 1, food = 2, eatable = 5, compostability = 85},
 	inventory_image = "useless_beans_useless_bean.png",
 	wield_image = "useless_beans_useless_bean.png",
@@ -48,7 +46,7 @@ minetest.register_decoration({
 minetest.register_node("useful_green_potatoes:useful_green_potato_block", {
     description = "Useful Green Potato Block",
     tiles = {"useless_beans_useless_bean_block.png"},
-	sounds = sound_mod.node_sound_leaves_default,
+	sounds = why.sound_mod.node_sound_leaves_default,
     groups = {dig_immediate = 3, plant = 1, deco_block = 1, fall_damage_add_percent = 150},
 })
 
@@ -112,7 +110,7 @@ minetest.register_craft({
 minetest.register_node("useful_green_potatoes:useful_green_potato_ingot_block", {
     description = "Useful Green Potato Ingot Block",
     tiles = {"useless_beans_useless_bean_ingot_block.png"},
-	sounds = sound_mod.node_sound_metal_default,
+	sounds = why.sound_mod.node_sound_metal_default,
     groups = {plant = 1, deco_block = 1, pickaxey=4, cracky=3, fall_damage_add_percent = 600, contact_damage = 6},
 	_mcl_blast_resistance = 6,
 	_mcl_hardness = 3,
@@ -177,7 +175,7 @@ minetest.register_node("useful_green_potatoes:useful_green_potato_gold", {
     description = "Golden Useful Green Potato",
     drawtype = "plantlike",
     tiles = {"useless_beans_useless_bean_gold.png"},
-	sounds = sound_mod.node_sound_leaves_default,
+	sounds = why.sound_mod.node_sound_leaves_default,
     groups = {dig_immediate = 3, dig_by_piston = 1, plant = 1, craftitem = 1, deco_block = 1, dig_by_water = 1, food = 2, eatable = 4, can_eat_when_full = 1},
 	inventory_image = "useless_beans_useless_bean_gold.png",
 	wield_image = "useless_beans_useless_bean_gold.png",
@@ -225,7 +223,7 @@ minetest.register_node("useful_green_potatoes:useful_green_potato_liquid_flowing
 		},
 	},
 	color = "#3FE43F",
-	sounds = sound_mod.node_sound_water_default,
+	sounds = why.sound_mod.node_sound_water_default,
 	is_ground_content = false,
 	use_texture_alpha = USE_TEXTURE_ALPHA,
 	paramtype = "light",
@@ -265,7 +263,7 @@ minetest.register_node("useful_green_potatoes:useful_green_potato_liquid_source"
 		}
 	},
 	color = "#3FE43F",
-	sounds = sound_mod.node_sound_water_default,
+	sounds = why.sound_mod.node_sound_water_default,
 	is_ground_content = false,
 	use_texture_alpha = USE_TEXTURE_ALPHA,
 	paramtype = "light",
@@ -422,7 +420,7 @@ end
 minetest.register_craft({
     output = "useful_green_potatoes:pick_useful_green_potato",
     recipe = {
-        {"useful_green_potato:useful_green_potato", "useful_green_potato:useful_green_potato", "useful_green_potato:useful_green_potato"},
+        {"useful_green_potatoes:useful_green_potato", "useful_green_potatoes:useful_green_potato", "useful_green_potatoes:useful_green_potato"},
         {"", stick_itemstring, ""},
         {"", stick_itemstring, ""}
     }
@@ -431,8 +429,8 @@ minetest.register_craft({
 minetest.register_craft({
     output = "useful_green_potatoes:axe_useful_green_potato",
     recipe = {
-        {"useful_green_potato:useful_green_potato", "useful_green_potato:useful_green_potato", ""},
-        {"useful_green_potato:useful_green_potato", stick_itemstring, ""},
+        {"useful_green_potatoes:useful_green_potato", "useful_green_potatoes:useful_green_potato", ""},
+        {"useful_green_potatoes:useful_green_potato", stick_itemstring, ""},
         {"", stick_itemstring, ""}
     }
 })
@@ -440,7 +438,7 @@ minetest.register_craft({
 minetest.register_craft({
     output = "useful_green_potatoes:hoe_useful_green_potato",
     recipe = {
-        {"useful_green_potato:useful_green_potato", "useful_green_potato:useful_green_potato", ""},
+        {"useful_green_potatoes:useful_green_potato", "useful_green_potatoes:useful_green_potato", ""},
         {"", stick_itemstring, ""},
         {"", stick_itemstring, ""}
     }
@@ -449,7 +447,7 @@ minetest.register_craft({
 minetest.register_craft({
     output = "useful_green_potatoes:shovel_useful_green_potato",
     recipe = {
-        {"", "useful_green_potato:useful_green_potato", ""},
+        {"", "useful_green_potatoes:useful_green_potato", ""},
         {"", stick_itemstring, ""},
         {"", stick_itemstring, ""}
     }
@@ -458,8 +456,8 @@ minetest.register_craft({
 minetest.register_craft({
     output = "useful_green_potatoes:sword_useful_green_potato",
     recipe = {
-        {"", "useful_green_potato:useful_green_potato", ""},
-        {"", "useful_green_potato:useful_green_potato", ""},
+        {"", "useful_green_potatoes:useful_green_potato", ""},
+        {"", "useful_green_potatoes:useful_green_potato", ""},
         {"", stick_itemstring, ""}
     }
 })

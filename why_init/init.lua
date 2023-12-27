@@ -34,11 +34,13 @@ function why.inventory_formspec(x,y)
 end
 
 if why.mcl then
+    why.sound_mod = mcl_sounds
     for _, mod in ipairs(mod_list) do
         mcl_item_id.set_mod_namespace(mod, "why")
     end
     mcl_item_id.set_mod_namespace("ghost_blocks")
 else
+    why.sound_mod = default
     minetest.register_on_mods_loaded(function()
         for name, def in pairs(minetest.registered_items) do
             for _, mod in ipairs(mod_list) do

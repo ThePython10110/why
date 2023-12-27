@@ -1,4 +1,18 @@
+local overlay, outer_itemstring, center_itemstring, empty_bucket, lava_bucket
 if why.mcl then
+	overlay = mcl_enchanting.overlay
+	outer_itemstring = "mcl_nether:netherrack"
+	center_itemstring = "mcl_sponges:sponge"
+	empty_bucket = "mcl_buckets:bucket_empty"
+	lava_bucket = "mcl_buckets:bucket_lava"
+else
+	overlay = "^[colorize:purple:50"
+	outer_itemstring = "wool:red" -- I don't know...
+	center_itemstring = "default:mese_crystal"
+	empty_bucket = "bucket:bucket_empty"
+	lava_bucket = "bucket:bucket_lava"
+end
+
 local absorb = function(pos)
 	local change = false
 	-- Count number of absorbed river water vs other nodes
@@ -29,13 +43,12 @@ minetest.register_node("lava_sponge:lava_sponge", {
 		"come in contact with lava, turning it into a wet sponge.",
 	drawtype = "normal",
 	is_ground_content = false,
-	tiles = {"mcl_sponges_sponge.png"..mcl_enchanting.overlay},
+	tiles = {"lava_sponge.png"..overlay},
 	walkable = true,
 	pointable = true,
 	diggable = true,
 	buildable_to = false,
-	stack_max = 64,
-	sounds = mcl_sounds.node_sound_dirt_defaults(),
+	sounds = why.sound_mod.node_sound_dirt_defaults(),
 	groups = {handy=1, hoey=1, building_block=1},
 	on_place = function(itemstack, player, pointed_thing)
 		local pn = player:get_player_name()
@@ -70,6 +83,9 @@ minetest.register_node("lava_sponge:lava_sponge", {
 			local absorbed, wet_sponge = absorb(pos)
 			if absorbed then
 				minetest.item_place_node(ItemStack(wet_sponge), player, pointed_thing)
+				if awards then
+					awards.unlock(player:get_player_name(), "why:sponge")
+				end
 				if not minetest.is_creative_enabled(player:get_player_name()) then
 					itemstack:take_item()
 				end
@@ -88,13 +104,13 @@ minetest.register_node("lava_sponge:lava_sponge_wet", {
 	_doc_items_longdesc = "A lava-logged sponge can be used as fuel in the furnace to turn it into a (dry) lava sponge.",
 	drawtype = "normal",
 	is_ground_content = false,
-	tiles = {"mcl_sponges_sponge_wet.png"..mcl_enchanting.overlay},
+	tiles = {"lava_sponge_wet.png"..overlay},
 	walkable = true,
 	pointable = true,
 	diggable = true,
 	buildable_to = false,
 	stack_max = 64,
-	sounds = mcl_sounds.node_sound_dirt_defaults(),
+	sounds = why.sound_mod.node_sound_dirt_defaults(),
 	groups = {handy=1, hoey=1, building_block=1},
 	_mcl_blast_resistance = 0.6,
 	_mcl_hardness = 0.6,
@@ -122,18 +138,27 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
-    output = "lava_sponge:lava_sponge",
-    recipe = {
-        {"mcl_nether:netherrack", "mcl_nether:netherrack", "mcl_nether:netherrack"},
-        {"mcl_nether:netherrack", "mcl_sponges:sponge", "mcl_nether:netherrack"},
-        {"mcl_nether:netherrack", "mcl_nether:netherrack", "mcl_nether:netherrack"}
-    }
+	output = "lava_sponge:lava_sponge",
+	recipe = {
+		{outer_itemstring, outer_itemstring, outer_itemstring},
+		{outer_itemstring, center_itemstring, outer_itemstring},
+		{outer_itemstring, outer_itemstring, outer_itemstring}
+	}
 })
-end
 
 minetest.register_craft({
 	output = "lava_sponge:lava_sponge_wet",
 	type = "shapeless",
-	recipe = {"mcl_buckets:bucket_empty", "lava_sponge:lava_sponge_wet"},
-	replacements = {{"mcl_buckets:bucket_empty", "mcl_buckets:bucket_lava"}}
+	recipe = {empty_bucket, "lava_sponge:lava_sponge_wet"},
+	replacements = {{empty_bucket, lava_bucket}}
 })
+
+if awards then
+	awards.register_achievement("why:sponge", {
+		title = "Just use buckets.",
+		description = "Place a lava sponge near lava.",
+		icon = "lava_sponge_wet.png",
+		type = "Advancement",
+		group = "Why"
+	})
+end

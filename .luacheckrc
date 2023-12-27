@@ -20,6 +20,8 @@ read_globals = {
     "mcl_armor",
     "armor",
     "mcl_enchanting",
+    "awards",
+    "mcl_item_entity",
 
     "Raycast",
     "Settings",

@@ -1,8 +1,6 @@
-local sound_mod = default
 local water_itemstring = "bucket:bucket_water"
 local sticky_block_sounds
 if why.mcl then
-    sound_mod = mcl_sounds
 	water_itemstring = "mcl_buckets:bucket_water"
 	sticky_block_sounds = {
 		dug = {name = "slimenodes_dug", gain = 0.6},
@@ -40,7 +38,7 @@ minetest.register_node("sticky_things:glue_flowing", {
 		},
 	},
 	color = "#EEEEEE",
-	sounds = sound_mod.node_sound_water_default,
+	sounds = why.sound_mod.node_sound_water_default,
 	is_ground_content = false,
 	use_texture_alpha = USE_TEXTURE_ALPHA,
 	paramtype = "light",
@@ -80,7 +78,7 @@ minetest.register_node("sticky_things:glue_source", {
 		}
 	},
 	color = "#EEEEEE",
-	sounds = sound_mod.node_sound_water_default,
+	sounds = why.sound_mod.node_sound_water_default,
 	is_ground_content = false,
 	use_texture_alpha = USE_TEXTURE_ALPHA,
 	paramtype = "light",
