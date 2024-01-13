@@ -268,7 +268,7 @@ if awards then
         type = "Advancement",
         group = "Why"
     })
-    if not why.mineclonia then
+    if not why.mcla then
         mcl_item_entity.register_pickup_achievement("meat_blocks:meatball", "why:meatball")
     end
 end

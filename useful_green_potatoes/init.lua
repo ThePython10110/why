@@ -314,7 +314,7 @@ if why.mcl or minetest.get_modpath("3d_armor") then
         mcl_armor.register_set({
             name = "useful_green_potato",
             description = "Useful Green Potato",
-            descriptions = why.mineclonia and {
+            descriptions = why.mcla and {
                 head = "Useful Green Potato Helmet",
                 torso = "Useful Green Potato Chestplate",
                 legs = "Useful Green Potato Leggings",

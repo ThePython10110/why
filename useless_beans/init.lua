@@ -145,7 +145,7 @@ if why.mcl then
             description = "Craft an enchanted golden useless bean",
             icon = "useless_beans_useless_bean_gold.png" .. mcl_enchanting.overlay,
             trigger = {
-                type = "crafting",
+                type = why.mcla and "craft" or "crafting",
                 item = "useless_beans:useless_bean_gold_enchanted",
                 target = 1
             },
@@ -284,7 +284,7 @@ if why.mcl or minetest.get_modpath("3d_armor") then
         mcl_armor.register_set({
             name = "useless_bean",
             description = "Useless Bean",
-            descriptions = why.mineclonia and {
+            descriptions = why.mcla and {
                 head = "Useless Bean Helmet",
                 torso = "Useless Bean Chestplate",
                 legs = "Useless Bean Leggings",

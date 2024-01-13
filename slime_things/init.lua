@@ -146,7 +146,7 @@ minetest.override_item("mesecons_button:button_slimeblock_on", {
 })
 end
 
-if awards then
+if awards and why.mcl then
     awards.register_achievement("why:fourteen", {
         title = "Fourteen seconds of waiting",
         description = "Press a slime button",

@@ -1,7 +1,8 @@
 why = {}
 
 why.mcl = minetest.get_modpath("mcl_core")
-why.mineclonia = minetest.get_game_info().id == "mineclonia"
+why.mcla = minetest.get_game_info().id == "mineclonia"
+why.mcl2 = why.mcl and not why.mcla
 
 -- All Why mods that add items/nodes should be in this list.
 local mod_list = {
@@ -35,12 +36,15 @@ end
 
 if why.mcl then
     why.sound_mod = mcl_sounds
+else
+    why.sound_mod = default
+end
+if why.mcl2 then
     for _, mod in ipairs(mod_list) do
         mcl_item_id.set_mod_namespace(mod, "why")
     end
     mcl_item_id.set_mod_namespace("ghost_blocks")
 else
-    why.sound_mod = default
     minetest.register_on_mods_loaded(function()
         for name, def in pairs(minetest.registered_items) do
             for _, mod in ipairs(mod_list) do

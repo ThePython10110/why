@@ -15,8 +15,6 @@ end
 
 local absorb = function(pos)
 	local change = false
-	-- Count number of absorbed river water vs other nodes
-	-- to determine the wet sponge type.
 	local p, n
 	for i=-3,3 do
     for j=-3,3 do
@@ -30,8 +28,6 @@ local absorb = function(pos)
     end
     end
     end
-	-- The dominant water type wins. In case of a tie, normal water wins.
-	-- This slight bias is intentional.
 	local sponge_type = "lava_sponge:lava_sponge_wet"
 	return change, sponge_type
 end
@@ -40,7 +36,7 @@ minetest.register_node("lava_sponge:lava_sponge", {
 	description = "Lava Sponge",
 	_tt_help = "Removes lava on contact",
 	_doc_items_longdesc = "Lava sponges are blocks which remove lava around them when they are placed or"..
-		"come in contact with lava, turning it into a wet sponge.",
+		"come in contact with lava, turning it into a lavalogged sponge.",
 	drawtype = "normal",
 	is_ground_content = false,
 	tiles = {"lava_sponge.png"..overlay},
@@ -162,3 +158,6 @@ if awards then
 		group = "Why"
 	})
 end
+
+-- using "cooking" because it really doesn't matter
+if exchangeclone then exchangeclone.register_craft({output = "lava_sponge:lava_sponge_wet", type = "cooking", recipe = "lava_sponge:lava_sponge"}) end
