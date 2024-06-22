@@ -4,7 +4,7 @@ if why.mcl then
 
 
 
-local meatball_rain_amount = minetest.settings:get("meat_blocks_meatball_rain_amount") or 1
+local meatball_rain_amount = tonumber(minetest.settings:get("meat_blocks_meatball_rain_amount")) or 1
 
 function why.eat_burnt_food(hunger_restore, fire_time, itemstack, player, pointed_thing)
     if not player:get_player_control().sneak then
