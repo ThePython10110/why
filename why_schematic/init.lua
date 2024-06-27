@@ -1,4 +1,4 @@
-minetest.register_decoration({minetest.register_decoration({
+minetest.register_decoration({
     deco_type = "schematic",
     place_on = {"group:sand", "group:soil", "mcl_mud:mud"},
     sidelen = 16,
@@ -16,5 +16,4 @@ minetest.register_decoration({minetest.register_decoration({
     rotation = "random",
     height = 1,
     flags = "all_floors, liquid_surface, force_placement"
-})
 })
