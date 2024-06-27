@@ -14,7 +14,7 @@ minetest.register_node("useful_green_potatoes:useful_green_potato", {
     drawtype = "plantlike",
     tiles = {"useless_beans_useless_bean.png"},
 	sounds = why.sound_mod.node_sound_leaves_default,
-    groups = {dig_immediate = 3, dig_by_piston = 1, plant = 1, craftitem = 1, dig_by_water = 1, food = 2, eatable = 5, compostability = 85},
+    groups = {dig_immediate = 3, dig_by_piston = 1, plant = 1, craftitem = 1, dig_by_water = 1, food = 2, eatable = 5, compostability = 85, blast_furnace_smeltable = 1},
 	inventory_image = "useless_beans_useless_bean.png",
 	wield_image = "useless_beans_useless_bean.png",
     walkable = false,

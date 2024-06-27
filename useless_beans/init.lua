@@ -14,7 +14,8 @@ minetest.register_node("useless_beans:useless_bean", {
     drawtype = "plantlike",
     tiles = {"useless_beans_useless_bean.png"},
 	sounds = why.sound_mod.node_sound_leaves_default,
-    groups = {useless = 1, dig_immediate = 3, dig_by_piston = 1, plant = 1, craftitem = 1, deco_block = 1, dig_by_water = 1},
+    groups = {useless = 1, dig_immediate = 3, dig_by_piston = 1, plant = 1, craftitem = 1, deco_block = 1, dig_by_water = 1,
+	blast_furnace_smeltable = 1},
 	inventory_image = "useless_beans_useless_bean.png",
 	wield_image = "useless_beans_useless_bean.png",
     walkable = false

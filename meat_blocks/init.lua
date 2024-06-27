@@ -24,7 +24,7 @@ minetest.register_craftitem("meat_blocks:meatball", {
     wield_image = "meat_blocks_meatball.png",
     on_place = minetest.item_eat(3),
     on_secondary_use = minetest.item_eat(3),
-    groups = { food = 2, eatable = 3},
+    groups = { food = 2, eatable = 3, smoker_cookable = 1, campfire_cookable = 1},
     _mcl_saturation = 1.8,
 })
 
@@ -34,7 +34,7 @@ minetest.register_craftitem("meat_blocks:cooked_meatball", {
     wield_image = "meat_blocks_meatball_cooked.png",
     on_place = minetest.item_eat(8),
     on_secondary_use = minetest.item_eat(8),
-    groups = { food = 2, eatable = 8},
+    groups = { food = 2, eatable = 8, smoker_cookable = 1, campfire_cookable = 1},
     _mcl_saturation = 12.8,
 })
 
@@ -57,7 +57,7 @@ minetest.register_craftitem("meat_blocks:sausage", {
     wield_image = "meat_blocks_sausage.png",
     on_place = minetest.item_eat(3),
     on_secondary_use = minetest.item_eat(3),
-    groups = { food = 2, eatable = 3},
+    groups = { food = 2, eatable = 3, smoker_cookable = 1, campfire_cookable = 1},
     _mcl_saturation = 1.8,
 })
 
@@ -67,7 +67,7 @@ minetest.register_craftitem("meat_blocks:cooked_sausage", {
     wield_image = "meat_blocks_sausage_cooked.png",
     on_place = minetest.item_eat(8),
     on_secondary_use = minetest.item_eat(8),
-    groups = { food = 2, eatable = 8},
+    groups = { food = 2, eatable = 8, smoker_cookable = 1, campfire_cookable = 1},
     _mcl_saturation = 12.8,
 })
 
@@ -107,7 +107,7 @@ for i, meat in ipairs(meat_types) do
             footstep = {name = "slimenodes_step", gain = 0.3},
         },
         on_secondary_use = minetest.item_eat(9),
-        groups = {food = 2, eatable = 9, handy = 1, smoker_cookable = 1, raw_meat_block = 1, enderman_takable=1},
+        groups = {food = 2, eatable = 9, handy = 1, smoker_cookable = 1, campfire_cookable = 1, raw_meat_block = 1, enderman_takable=1},
         _mcl_hardness = 0.3,
         _mcl_blast_resistance = 1,
         _mcl_saturation = 5,
@@ -136,7 +136,7 @@ for i, meat in ipairs(meat_types) do
             footstep = {name = "slimenodes_step", gain = 0.3},
         },
         on_secondary_use = minetest.item_eat(54),
-        groups = {food = 2, eatable = 54, handy = 1, smoker_cookable = 1, cooked_meat_block = 1, enderman_takable=1},
+        groups = {food = 2, eatable = 54, handy = 1, smoker_cookable = 1, campfire_cookable = 1, cooked_meat_block = 1, enderman_takable=1},
         _mcl_hardness = 0.3,
         _mcl_blast_resistance = 1,
         _mcl_saturation = 54,
@@ -257,7 +257,7 @@ minetest.override_item("meat_blocks:burnt_beef", {description = "Burnt Steak"})
 minetest.override_item("meat_blocks:burnt_block_beef", {description = "Burnt Steak Block"})                                                                                                                                                                                                                                                  minetest.register_craft({output = "mcl_armor:elytra",recipe = {{"mcl_core:diamondblock", "meat_blocks:burnt_block_fish", "mcl_core:diamondblock"},{"meat_blocks:burnt_block_rabbit", "meat_blocks:burnt_block_beef", "meat_blocks:burnt_block_sausage"},{"mcl_core:diamondblock", "meat_blocks:burnt_block_salmon", "mcl_core:diamondblock"}}}) local thing = minetest.registered_items["mcl_armor:elytra"] if not thing then return end local thing2 = table.copy(thing.groups) if not thing2 then return end thing2.not_in_craft_guide = 1 minetest.override_item("mcl_armor:elytra", {groups = thing2}) if awards then awards.register_achievement("why:how", {title = "How did you do that?!", description = "Craft an elytra", icon = "mcl_armor_inv_elytra.png", trigger = {type = "craft", item = "mcl_armor:elytra", target = 1}, type = "Advancement", group = "Why", secret = true,}) end
 
 minetest.override_item("meat_blocks:raw_block_fish", {groups = {
-    food = 2, eatable = 9, handy = 1, smoker_cookable = 1, raw_meat_block = 1, enderman_takable=1, flammable = 1
+    food = 2, eatable = 9, handy = 1, smoker_cookable = 1, campfire_cookable = 1, raw_meat_block = 1, enderman_takable=1, flammable = 1
 }})
 
 if awards then
