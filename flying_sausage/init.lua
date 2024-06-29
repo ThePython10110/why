@@ -1,6 +1,7 @@
 if why.mcl then
 
 
+minetest.override_item("mcl_armor:elytra", {groups = {smoker_cookable = 1, campfire_cookable = 1}})
 
 minetest.register_craftitem("flying_sausage:cooked_elytra", {
     description = "Cooked Elytra\nWeirdly delicious.",
@@ -9,6 +10,7 @@ minetest.register_craftitem("flying_sausage:cooked_elytra", {
     on_place = minetest.item_eat(9999999), -- why not?
     on_secondary_use = minetest.item_eat(9999999),
     _mcl_saturation = 9999999,
+	groups = {smoker_cookable = 1, campfire_cookable = 1}
 })
 
 minetest.register_craft({
