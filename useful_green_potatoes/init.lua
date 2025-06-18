@@ -9,7 +9,7 @@ end
 
 ---------------------USELESS BEANS, BEANGOTS, AND BLOCKS-----------------------------------
 
-minetest.register_node("useful_green_potatoes:useful_green_potato", {
+core.register_node("useful_green_potatoes:useful_green_potato", {
     description = "Useful Green Potato",
     drawtype = "plantlike",
     tiles = {"useless_beans_useless_bean.png"},
@@ -18,14 +18,14 @@ minetest.register_node("useful_green_potatoes:useful_green_potato", {
 	inventory_image = "useless_beans_useless_bean.png",
 	wield_image = "useless_beans_useless_bean.png",
     walkable = false,
-	on_secondary_use = minetest.item_eat(5),
+	on_secondary_use = core.item_eat(5),
 	_mcl_saturation = 6.0,
 })
 
 local y_max = 31000
 if why.mcl then y_max = mcl_vars.mg_overworld_max end
 
-minetest.register_decoration({
+core.register_decoration({
     decoration = "useful_green_potatoes:useful_green_potato",
     deco_type = "simple",
     height = 1,
@@ -43,7 +43,7 @@ minetest.register_decoration({
     y_max = y_max,
 })
 
-minetest.register_node("useful_green_potatoes:useful_green_potato_block", {
+core.register_node("useful_green_potatoes:useful_green_potato_block", {
     description = "Useful Green Potato Block",
     tiles = {"useless_beans_useless_bean_block.png"},
 	sounds = why.sound_mod.node_sound_leaves_default,
@@ -53,7 +53,7 @@ minetest.register_node("useful_green_potatoes:useful_green_potato_block", {
 -- This function is so much more complicated than it needs to be because the player's position
 -- is not always accurate (sometimes slightly too high/low), meaning that I have to check a lot
 -- more nodes than I wish I did. It also means that there are a lot of false positives.
-minetest.register_on_player_hpchange(function(player, hp_change, reason)
+core.register_on_player_hpchange(function(player, hp_change, reason)
     if reason.type ~= "fall" then return hp_change end
     local player_pos = player:get_pos()
     player_pos.y = math.floor(player_pos.y)
@@ -63,9 +63,9 @@ minetest.register_on_player_hpchange(function(player, hp_change, reason)
     while not solid_detected do
         for x = math.floor(player_pos.x), math.ceil(player_pos.x) do
             for z = math.floor(player_pos.z), math.ceil(player_pos.z) do
-                if minetest.get_node({x=x,y=y+1,z=z}).name == "air" then
+                if core.get_node({x=x,y=y+1,z=z}).name == "air" then
                     local pos = {x=x,y=y,z=z}
-                    local node = minetest.get_node(pos)
+                    local node = core.get_node(pos)
                     if node.name ~= "air" then solid_detected = true end
                     if node.name == "useful_green_potatoes:useful_green_potato_block" then
                         return math.abs(hp_change), true
@@ -78,7 +78,7 @@ minetest.register_on_player_hpchange(function(player, hp_change, reason)
     return hp_change
 end, true)
 
-minetest.register_craft({
+core.register_craft({
     output = "useful_green_potatoes:useful_green_potato_block",
     recipe = {
         {"useful_green_potatoes:useful_green_potato", "useful_green_potatoes:useful_green_potato", "useful_green_potatoes:useful_green_potato"},
@@ -87,27 +87,27 @@ minetest.register_craft({
     }
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useful_green_potatoes:useful_green_potato 9",
     type = "shapeless",
     recipe = {"useful_green_potatoes:useful_green_potato_block"}
 })
 
-minetest.register_craftitem("useful_green_potatoes:useful_green_potato_ingot", {
+core.register_craftitem("useful_green_potatoes:useful_green_potato_ingot", {
     description = "Useful Green Potato Ingot",
 	inventory_image = "useless_beans_useless_bean_ingot.png",
 	wield_image = "useless_beans_useless_bean_ingot.png",
     groups = {}
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useful_green_potatoes:useful_green_potato_ingot",
     type = "cooking",
     recipe = "useful_green_potatoes:useful_green_potato",
     time = 20
 })
 
-minetest.register_node("useful_green_potatoes:useful_green_potato_ingot_block", {
+core.register_node("useful_green_potatoes:useful_green_potato_ingot_block", {
     description = "Useful Green Potato Ingot Block",
     tiles = {"useless_beans_useless_bean_ingot_block.png"},
 	sounds = why.sound_mod.node_sound_metal_default,
@@ -117,20 +117,20 @@ minetest.register_node("useful_green_potatoes:useful_green_potato_ingot_block", 
 })
 
 local time = 0
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	time = time + dtime
 	if time < 0.5 then return end
 	time = 0
-	for _, player in pairs(minetest.get_connected_players()) do
+	for _, player in pairs(core.get_connected_players()) do
 
 		-- where am I?
 		local pos = player:get_pos()
 
         -- Am I near a useful green potato ingot block?
 		local itemstring = "useful_green_potatoes:useful_green_potato_ingot_block"
-        local near = minetest.find_node_near(pos, 1, itemstring)
+        local near = core.find_node_near(pos, 1, itemstring)
         if not near then
-            near = minetest.find_node_near({x=pos.x, y=pos.y-1, z=pos.z}, 1, itemstring)
+            near = core.find_node_near({x=pos.x, y=pos.y-1, z=pos.z}, 1, itemstring)
         end
         if near then
             -- Am I touching the useful green potato ingot block? If so, it hurts
@@ -149,7 +149,7 @@ minetest.register_globalstep(function(dtime)
     end
 end)
 
-minetest.register_craft({
+core.register_craft({
     output = "useful_green_potatoes:useful_green_potato_ingot_block",
     recipe = {
         {"useful_green_potatoes:useful_green_potato_ingot", "useful_green_potatoes:useful_green_potato_ingot", "useful_green_potatoes:useful_green_potato_ingot"},
@@ -158,7 +158,7 @@ minetest.register_craft({
     }
 })
 
-local gapple_hunger_restore = minetest.item_eat(6)
+local gapple_hunger_restore = core.item_eat(6)
 
 local function eat_gapple(itemstack, player, pointed_thing)
     if why.mcl then
@@ -171,7 +171,7 @@ local function eat_gapple(itemstack, player, pointed_thing)
 	return gapple_hunger_restore(itemstack, player, pointed_thing)
 end
 
-minetest.register_node("useful_green_potatoes:useful_green_potato_gold", {
+core.register_node("useful_green_potatoes:useful_green_potato_gold", {
     description = "Golden Useful Green Potato",
     drawtype = "plantlike",
     tiles = {"useless_beans_useless_bean_gold.png"},
@@ -184,7 +184,7 @@ minetest.register_node("useful_green_potatoes:useful_green_potato_gold", {
 	_mcl_saturation = 9.6,
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useful_green_potatoes:useful_green_potato_gold",
     light_source = 14,
     recipe = {
@@ -198,13 +198,13 @@ minetest.register_craft({
 
 local USE_TEXTURE_ALPHA = true
 
-if minetest.features.use_texture_alpha_string_modes then
+if core.features.use_texture_alpha_string_modes then
 	USE_TEXTURE_ALPHA = "blend"
 end
 
 local WATER_VISC = 1
 
-minetest.register_node("useful_green_potatoes:useful_green_potato_liquid_flowing", {
+core.register_node("useful_green_potatoes:useful_green_potato_liquid_flowing", {
 	description = "Flowing Useful Green Potato Liquid",
 	_doc_items_create_entry = false,
 	wield_image = "useless_beans_water_flowing_animated.png^[verticalframe:64:0",
@@ -247,7 +247,7 @@ minetest.register_node("useful_green_potatoes:useful_green_potato_liquid_flowing
 	_mcl_hardness = -1,
 })
 
-minetest.register_node("useful_green_potatoes:useful_green_potato_liquid_source", {
+core.register_node("useful_green_potatoes:useful_green_potato_liquid_source", {
 	description = "Useful Green Potato Liquid Source",
 	drawtype = "liquid",
 	waving = 3,
@@ -302,14 +302,14 @@ else
 		"useful_green_potatoes:bucket_useless_bean_liquid", "useless_beans_bucket_useless_bean_liquid.png", "Useful Green Potato Liquid Bucket")
 end
 
-minetest.register_craft({
+core.register_craft({
     output = "useful_green_potatoes:bucket_useful_green_potato_liquid",
     type = "shapeless",
     recipe = {"useful_green_potatoes:useful_green_potato", water_itemstring}
 })
 
 ---------------------USELESS BEAN TOOLS/ARMOR------------------------
-if why.mcl or minetest.get_modpath("3d_armor") then
+if why.mcl or core.get_modpath("3d_armor") then
     if why.mcl then
         mcl_armor.register_set({
             name = "useful_green_potato",
@@ -339,7 +339,7 @@ if why.mcl or minetest.get_modpath("3d_armor") then
             sound_unequip = "mcl_armor_unequip_iron",
         })
         for _, type in ipairs({"helmet","chestplate","leggings","boots"}) do
-            minetest.override_item("useful_green_potatoes:"..type.."_useful_green_potato", {
+            core.override_item("useful_green_potatoes:"..type.."_useful_green_potato", {
                 wield_image = "useless_beans_inv_"..type.."_useless_bean.png",
                 inventory_image = "useless_beans_inv_"..type.."_useless_bean.png"
             })
@@ -357,14 +357,14 @@ if why.mcl or minetest.get_modpath("3d_armor") then
             })
         end
         local p = "useful_green_potatoes:useful_green_potato_ingot"
-        minetest.register_craft({
+        core.register_craft({
             output = "useful_green_potatoes:helmet_useful_green_potato",
             recipe = {
                 {p, p, p},
                 {p, "",p},
             }
         })
-        minetest.register_craft({
+        core.register_craft({
             output = "useful_green_potatoes:chestplate_useful_green_potato",
             recipe = {
                 {p, "",p},
@@ -372,7 +372,7 @@ if why.mcl or minetest.get_modpath("3d_armor") then
                 {p, p, p},
             }
         })
-        minetest.register_craft({
+        core.register_craft({
             output = "useful_green_potatoes:leggings_useful_green_potato",
             recipe = {
                 {p, p, p},
@@ -380,14 +380,14 @@ if why.mcl or minetest.get_modpath("3d_armor") then
                 {p, "",p},
             }
         })
-        minetest.register_craft({
+        core.register_craft({
             output = "useful_green_potatoes:boots_useful_green_potato",
             recipe = {
                 {p, "",p},
                 {p, "",p}
             }
         })
-        minetest.register_craft({
+        core.register_craft({
             output = "useful_green_potatoes:shield_useful_green_potato",
             recipe = {
                 {p, p,p},
@@ -403,21 +403,21 @@ for name, long_name in pairs({pick = "Pickaxe", axe = "Axe", hoe = "Hoe", sword 
     if why.mcl then
         local mod = "mcl_tools"
         if name == "hoe" then mod = "mcl_farming" end
-        def = table.copy(minetest.registered_items[mod..":"..name.."_iron"])
+        def = table.copy(core.registered_items[mod..":"..name.."_iron"])
     else
         local mod = "default"
         if name == "hoe" then mod = "farming" end
-        def = table.copy(minetest.registered_items[mod..":"..name.."_steel"])
+        def = table.copy(core.registered_items[mod..":"..name.."_steel"])
     end
     def.description = "Useful Green Potato "..long_name
     def.groups.enchantability = nil
     if def._repair_material then def._repair_material = "useful_green_potatoes:useful_green_potato" end
     def.inventory_image = "useless_beans_"..name.."_useless_bean.png"
     def.wield_image = "useless_beans_"..name.."_useless_bean.png"
-    minetest.register_tool("useful_green_potatoes:"..name.."_useful_green_potato", def)
+    core.register_tool("useful_green_potatoes:"..name.."_useful_green_potato", def)
 end
 
-minetest.register_craft({
+core.register_craft({
     output = "useful_green_potatoes:pick_useful_green_potato",
     recipe = {
         {"useful_green_potatoes:useful_green_potato", "useful_green_potatoes:useful_green_potato", "useful_green_potatoes:useful_green_potato"},
@@ -426,7 +426,7 @@ minetest.register_craft({
     }
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useful_green_potatoes:axe_useful_green_potato",
     recipe = {
         {"useful_green_potatoes:useful_green_potato", "useful_green_potatoes:useful_green_potato", ""},
@@ -435,7 +435,7 @@ minetest.register_craft({
     }
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useful_green_potatoes:hoe_useful_green_potato",
     recipe = {
         {"useful_green_potatoes:useful_green_potato", "useful_green_potatoes:useful_green_potato", ""},
@@ -444,7 +444,7 @@ minetest.register_craft({
     }
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useful_green_potatoes:shovel_useful_green_potato",
     recipe = {
         {"", "useful_green_potatoes:useful_green_potato", ""},
@@ -453,7 +453,7 @@ minetest.register_craft({
     }
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useful_green_potatoes:sword_useful_green_potato",
     recipe = {
         {"", "useful_green_potatoes:useful_green_potato", ""},

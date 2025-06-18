@@ -17,7 +17,7 @@ function why.get_group_items(groups, allow_duplicates, include_no_group)
     end
     local in_group
 
-	for name, def in pairs(minetest.registered_nodes) do
+	for name, def in pairs(core.registered_nodes) do
         in_group = false
 		for i = 1, g_cnt do
 			local grp = groups[i]

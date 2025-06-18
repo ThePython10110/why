@@ -13,13 +13,13 @@ end
 
 local USE_TEXTURE_ALPHA = true
 
-if minetest.features.use_texture_alpha_string_modes then
+if core.features.use_texture_alpha_string_modes then
 	USE_TEXTURE_ALPHA = "blend"
 end
 
 local GLUE_VISC = 15
 
-minetest.register_node("sticky_things:glue_flowing", {
+core.register_node("sticky_things:glue_flowing", {
 	description = "Flowing Glue",
 	_doc_items_create_entry = false,
 	wield_image = "sticky_things_water_flowing_animated.png^[verticalframe:64:0",
@@ -62,7 +62,7 @@ minetest.register_node("sticky_things:glue_flowing", {
 	_mcl_hardness = -1,
 })
 
-minetest.register_node("sticky_things:glue_source", {
+core.register_node("sticky_things:glue_source", {
 	description = "Glue Source",
 	drawtype = "liquid",
 	waving = 3,
@@ -117,22 +117,22 @@ else
 		"sticky_things:bucket_glue", "sticky_things_bucket_glue.png", "Glue Bucket")
 end
 
-minetest.register_craft({
+core.register_craft({
     output = "sticky_things:bucket_glue",
     type = "shapeless",
     recipe = {"group:flower", water_itemstring},
 })
 
 if why.mcl then
-	minetest.register_node("sticky_things:sticky_block", {
+	core.register_node("sticky_things:sticky_block", {
 		description = "Sticky Block",
 		_mcl_hardness = 3,
 		groups = {cracky = 3, pickaxey = 1, disable_jump = 1},
 		tiles = {"sticky_things_sticky_block.png"},
 		sounds = sticky_block_sounds
 	})
-	minetest.register_globalstep(function()
-		for _,player in pairs(minetest.get_connected_players()) do
+	core.register_globalstep(function()
+		for _,player in pairs(core.get_connected_players()) do
 			-- who am I?
 			local name = player:get_player_name()
 
@@ -143,31 +143,33 @@ if why.mcl then
 			-- Standing on sticky block? If so, walk slower
 			if node_stand == "sticky_things:sticky_block"
 			or (node_stand == "air" and node_stand_below == "sticky_things:sticky_block") then
-				playerphysics.add_physics_factor(player, "speed", "mcl_playerplus:surface", 0.05)
+				playerphysics.add_physics_factor(player, "speed", "sticky_things:sticky_block", 0.05)
+			else
+				playerphysics.remove_physics_factor(player, "speed", "sticky_things:sticky_block")
 			end
 		end
 	end)
 
  -- if why.mcl then
-		minetest.register_craft({
+		core.register_craft({
 			output = "sticky_things:sticky_block",
 			type = "shapeless",
 			recipe = {"mcl_core:ice", "mcl_nether:soul_sand", "mcl_nether:soul_sand", "mcl_core:ice"}
 		})
 
-		minetest.register_craft({
+		core.register_craft({
 			output = "sticky_things:sticky_block",
 			type = "shapeless",
 			recipe = {"mcl_core:packed_ice", "mcl_nether:soul_sand", "mcl_nether:soul_sand", "mcl_core:packed_ice"}
 		})
 
-		minetest.register_craft({
+		core.register_craft({
 			output = "sticky_things:sticky_block",
 			type = "shapeless",
 			recipe = {"mcl_core:ice", "mcl_nether:soul_sand", "mcl_nether:soul_sand", "mcl_core:packed_ice"}
 		})
 --[[else
-		minetest.register_craft({
+		core.register_craft({
 			output = "sticky_things:sticky_block",
 			type = "shapeless",
 			recipe = {"default:ice", "default:sand", "default:sand", "default:ice"}

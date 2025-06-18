@@ -103,6 +103,15 @@ You can craft an elytra with meat blocks. Just put diamond blocks in the corners
 </details>
 
 # Changelog
+### v8.0
+This is mostly just a bugfix update.
+**BREAKING CHANGE:**
+All existing Ghost Blocks will become unknown nodes when updating to this version. 
+* Most (all?) nodes should be ghostifiable
+* You should now always actually get the node you put in. Before, putting in MCL sand could give suspicious sand as a result.
+* Ghostifiers and lava sponges are no longer unbreakable in MTG.
+* A lot of random bugfixes, mostly compatibility issues with new versions of MCLA and VL.
+* Added a new advancement.
 ### v7.0
 Honestly, it's likely that there are bugs now. I took a LONG break in the middle of this update (well, not exactly a break, since I did release the biggest update ExchangeClone's ever had), so I kind of forgot what I was doing.
 * Added achievements/advancements/awards (many are MCL-specific, a few are MCL2-specific for annoying reasons)

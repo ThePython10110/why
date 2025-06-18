@@ -8,9 +8,9 @@ local nether_check = function() end
 
 -- Sound helper functions for placing and taking liquids
 local function sound_place(itemname, pos)
-	local def = minetest.registered_nodes[itemname]
+	local def = core.registered_nodes[itemname]
 	if def and def.sounds and def.sounds.place then
-		minetest.sound_play(def.sounds.place, {gain=1.0, pos = pos, pitch = 1 + math.random(-10, 10)*0.005}, true)
+		core.sound_play(def.sounds.place, {gain=1.0, pos = pos, pitch = 1 + math.random(-10, 10)*0.005}, true)
 	end
 end
 
@@ -20,30 +20,30 @@ if why.mcl then
 	stone_itemstring = "mcl_core:stone"
 	obsidian_itemstring = "mcl_core:obsidian"
 	nether_check = function(pos, player)
-		local nn = minetest.get_node(pos).name
+		local nn = core.get_node(pos).name
 		-- Pour into cauldron
-		if minetest.get_item_group(nn, "cauldron") ~= 0 then
+		if core.get_item_group(nn, "cauldron") ~= 0 then
 			-- Put water into cauldron
 			if nn ~= "mcl_cauldrons:cauldron_3" then
-				minetest.set_node(pos, {name="mcl_cauldrons:cauldron_3"})
+				core.set_node(pos, {name="mcl_cauldrons:cauldron_3"})
 			end
 			sound_place("mcl_core:water_source", pos)
 			return false, true
 		-- Put water into mangrove roots
-		elseif minetest.get_node(pos).name == "mcl_mangrove:mangrove_roots" then
+		elseif core.get_node(pos).name == "mcl_mangrove:mangrove_roots" then
 			local dim = mcl_worlds.pos_to_dimension(pos)
 			if dim == "nether" then
-				minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+				core.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 				return false, true
 			end
-			minetest.set_node(pos, {name="mcl_mangrove:water_logged_roots"})
+			core.set_node(pos, {name="mcl_mangrove:water_logged_roots"})
 			sound_place("mcl_core:water_source", pos)
 			return false, true
 		else
 			-- Evaporate water if used in Nether (except on cauldron)
 			local dim = mcl_worlds.pos_to_dimension(pos)
 			if dim == "nether" then
-				minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+				core.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 				return false, true
 			end
 		end
@@ -53,19 +53,19 @@ end
 if not why.mcl then
 	default.cool_lava = function(pos, node) --override function to fix solid/fake liquids
 		if node.name == "default:lava_source"
-		or(minetest.registered_items[node.name].groups.lava and node.name:find("source")) then
-			minetest.set_node(pos, {name = "default:obsidian"})
+		or(core.registered_items[node.name].groups.lava and node.name:find("source")) then
+			core.set_node(pos, {name = "default:obsidian"})
 		else -- Lava flowing
-			minetest.set_node(pos, {name = "default:stone"})
+			core.set_node(pos, {name = "default:stone"})
 		end
-		minetest.sound_play("default_cool_lava",
+		core.sound_play("default_cool_lava",
 			{pos = pos, max_hear_distance = 16, gain = 0.2}, true)
 	end
 end
 
 function why.register_solid_liquid(source_itemstring)
-	if not minetest.registered_items[source_itemstring] then return end
-	local def = table.copy(minetest.registered_items[source_itemstring])
+	if not core.registered_items[source_itemstring] then return end
+	local def = table.copy(core.registered_items[source_itemstring])
     local _, _, item_name = string.find(source_itemstring, ".+:(.+)")
 	local new_itemstring = "fake_liquids:solid_"..item_name
 	def.description = "Solid "..def.description
@@ -99,7 +99,7 @@ function why.register_solid_liquid(source_itemstring)
 	end
 	def.damage_per_second = nil
 
-	minetest.register_node(new_itemstring, def)
+	core.register_node(new_itemstring, def)
 
 	local bucket_itemstring
 	if why.mcl then
@@ -108,7 +108,7 @@ function why.register_solid_liquid(source_itemstring)
 		bucket_itemstring = bucket.liquids[source_itemstring].itemname
 	end
 
-	minetest.register_craft({
+	core.register_craft({
 		output = new_itemstring,
 		recipe = {
 			{glass_itemstring, bucket_itemstring, glass_itemstring},
@@ -119,20 +119,20 @@ function why.register_solid_liquid(source_itemstring)
 end
 
 function why.register_fake_liquid(name, look_source, act_source)
-	local act_source_def = minetest.registered_items[act_source]
+	local act_source_def = core.registered_items[act_source]
 	local act_flowing = act_source_def.liquid_alternative_flowing
-	local look_source_def = minetest.registered_items[look_source]
+	local look_source_def = core.registered_items[look_source]
 	local look_flowing = look_source_def.liquid_alternative_flowing
-	local look_flowing_def = minetest.registered_items[look_flowing]
-	local act_flowing_def = minetest.registered_items[act_flowing]
+	local look_flowing_def = core.registered_items[look_flowing]
+	local act_flowing_def = core.registered_items[act_flowing]
 	local look_liquid_info
 	local look_bucket_def
 	if why.mcl then
 		look_liquid_info = mcl_buckets.liquids[look_source]
-		look_bucket_def = minetest.registered_items[look_liquid_info.bucketname]
+		look_bucket_def = core.registered_items[look_liquid_info.bucketname]
 	else
 		look_liquid_info = bucket.liquids[look_source]
-		look_bucket_def = minetest.registered_items[look_liquid_info.itemname]
+		look_bucket_def = core.registered_items[look_liquid_info.itemname]
 	end
 	if not (look_source_def and act_source_def and look_flowing_def and act_flowing_def) then return end
 
@@ -176,8 +176,8 @@ function why.register_fake_liquid(name, look_source, act_source)
 	new_flowing_def.liquid_alternative_flowing = new_flowing_itemstring
 	new_flowing_def.liquid_alternative_source = new_source_itemstring
 
-	minetest.register_node(new_source_itemstring, new_source_def)
-	minetest.register_node(new_flowing_itemstring, new_flowing_def)
+	core.register_node(new_source_itemstring, new_source_def)
+	core.register_node(new_flowing_itemstring, new_flowing_def)
 
 	if why.mcl then
 		local extra_check
@@ -206,7 +206,7 @@ function why.register_fake_liquid(name, look_source, act_source)
 end
 
 if why.mcl then
-	minetest.register_node("fake_liquids:milk_source", {
+	core.register_node("fake_liquids:milk_source", {
 		description = "Milk Source",
 		_doc_items_create_entry = false,
 		drawtype = "liquid",
@@ -244,7 +244,7 @@ if why.mcl then
 		_mcl_hardness = -1,
 
 	})
-	minetest.register_node("fake_liquids:milk_flowing", {
+	core.register_node("fake_liquids:milk_flowing", {
 		description = "Flowing Milk",
 		_doc_items_create_entry = false,
 		waving = 3,
@@ -288,7 +288,7 @@ if why.mcl then
 		_mcl_hardness = -1,
 	})
 
-	local milk_def = minetest.registered_items["mcl_mobitems:milk_bucket"]
+	local milk_def = core.registered_items["mcl_mobitems:milk_bucket"]
 	local drink_milk = milk_def.on_secondary_use
 	mcl_buckets.register_liquid{
 		source_place = "fake_liquids:milk_source",
@@ -303,7 +303,7 @@ if why.mcl then
 		extra_check = nether_check
 	}
 
-	minetest.override_item("mcl_mobitems:milk_bucket", {on_secondary_use = drink_milk})
+	core.override_item("mcl_mobitems:milk_bucket", {on_secondary_use = drink_milk})
 	-- remove the colon
 	mcl_buckets.liquids["fake_liquids:milk_source"].bucketname = "mcl_mobitems:milk_bucket"
 	mcl_buckets.buckets["mcl_mobitems:milk_bucket"] = table.copy(mcl_buckets.buckets[":mcl_mobitems:milk_bucket"])
@@ -331,7 +331,7 @@ else
 end
 
 if why.mcl then
-	minetest.register_abm({
+	core.register_abm({
 		label = "Lava cooling (solid liquids)",
 		nodenames = {"group:lava"},
 		neighbors = {"group:water"},
@@ -339,31 +339,31 @@ if why.mcl then
 		chance = 1,
 		min_y = mcl_vars.mg_end_min,
 		action = function(pos, node, active_object_count, active_object_count_wider)
-			if not minetest.registered_nodes[node.name].groups.solid_liquid then return end --make sure it's a solid liquid first
-			local water = minetest.find_nodes_in_area(
+			if not core.registered_nodes[node.name].groups.solid_liquid then return end --make sure it's a solid liquid first
+			local water = core.find_nodes_in_area(
 				{x=pos.x-1, y=pos.y-1, z=pos.z-1},
 				{x=pos.x+1, y=pos.y+1, z=pos.z+1},
 				"group:water"
 			)
 
 			for w=1, #water do
-				--local waternode = minetest.get_node(water[w])
-				--local watertype = minetest.registered_nodes[waternode.name].liquidtype
+				--local waternode = core.get_node(water[w])
+				--local watertype = core.registered_nodes[waternode.name].liquidtype
 				-- Lava on top of water: Water turns into stone
 				if water[w].y < pos.y and water[w].x == pos.x and water[w].z == pos.z then
-					minetest.set_node(water[w], {name=stone_itemstring})
-					minetest.sound_play("fire_extinguish_flame", {pos = water[w], gain = 0.25, max_hear_distance = 16}, true)
+					core.set_node(water[w], {name=stone_itemstring})
+					core.sound_play("fire_extinguish_flame", {pos = water[w], gain = 0.25, max_hear_distance = 16}, true)
 				elseif  ((water[w].y > pos.y and water[w].x == pos.x and water[w].z == pos.z) or
 						(water[w].y == pos.y and (water[w].x == pos.x or water[w].z == pos.z))) then
-					minetest.set_node(pos, {name=obsidian_itemstring})
-					minetest.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
+					core.set_node(pos, {name=obsidian_itemstring})
+					core.sound_play("fire_extinguish_flame", {pos = pos, gain = 0.25, max_hear_distance = 16}, true)
 				end
 			end
 		end,
 	})
 else
-	if minetest.settings:get_bool("enable_lavacooling") ~= false then
-		minetest.register_abm({
+	if core.settings:get_bool("enable_lavacooling") ~= false then
+		core.register_abm({
 			label = "Lava cooling (fake/solid liquids)",
 			nodenames = {"group:lava"},
 			neighbors = {"group:cools_lava", "group:water"},
@@ -378,11 +378,11 @@ else
 end
 
 local time = 0
-minetest.register_globalstep(function(dtime)
+core.register_globalstep(function(dtime)
 	time = time + dtime
 	if time < 0.5 then return end
 	time = 0
-	for _,player in pairs(minetest.get_connected_players()) do
+	for _,player in pairs(core.get_connected_players()) do
 		-- who am I?
 
 		-- where am I?
@@ -390,9 +390,9 @@ minetest.register_globalstep(function(dtime)
 
 		-- Am I near a solid liquid source that does damage?
 		for itemstring, damage in pairs(solid_liquid_damage) do
-			local near = minetest.find_node_near(pos, 1, itemstring)
+			local near = core.find_node_near(pos, 1, itemstring)
 			if not near then
-				near = minetest.find_node_near({x=pos.x, y=pos.y-1, z=pos.z}, 1, itemstring)
+				near = core.find_node_near({x=pos.x, y=pos.y-1, z=pos.z}, 1, itemstring)
 			end
 			if near then
 				-- Am I touching the solid liquid source? If so, it hurts
@@ -400,7 +400,7 @@ minetest.register_globalstep(function(dtime)
 				local dist_feet = vector.distance({x=pos.x, y=pos.y-1, z=pos.z}, near)
 				if dist < 1.1 or dist_feet < 1.1 then
 					if player:get_hp() > 0 then
-						local def = minetest.registered_items[itemstring]
+						local def = core.registered_items[itemstring]
 						if why.mcl then
 							local damage_type
 							if def.groups.lava then
@@ -441,16 +441,28 @@ if why.mcl then
 	--override brewing for fake liquids
 	local old_alchemy = mcl_potions.get_alchemy
 	mcl_potions.get_alchemy = function(ingr, pot)
+		local pot_name = pot:get_name()
 		if ingr == "mcl_potions:fermented_spider_eye" then
-			if fake_liquid_recipes[pot] then
-				return fake_liquid_recipes[pot]
+			if fake_liquid_recipes[pot_name] then
+				if why.mcla then
+					return ItemStack(fake_liquid_recipes[pot_name])
+				end
+				return fake_liquid_recipes[pot_name]
 			end
 		end
 		return old_alchemy(ingr, pot)
 	end
+	if why.mcla then
+		-- Allow buckets to be put into brewing stands
+		for liquid, fake_liquid in pairs(fake_liquid_recipes) do
+			local groups = table.copy(core.registered_items[liquid].groups)
+			groups.water_bottle = 176
+			core.override_item(liquid, {groups = groups})
+		end
+	end
 else
 	for liquid, fake_liquid in pairs(fake_liquid_recipes) do
-		minetest.register_craft{
+		core.register_craft{
 			output = fake_liquid,
 			type = "shapeless",
 			recipe = {liquid, "default:mese_crystal"}

@@ -1,26 +1,26 @@
 if why.mcl then
 
 
-minetest.override_item("mcl_armor:elytra", {groups = {smoker_cookable = 1, campfire_cookable = 1}})
+core.override_item("mcl_armor:elytra", {groups = {smoker_cookable = 1, campfire_cookable = 1}})
 
-minetest.register_craftitem("flying_sausage:cooked_elytra", {
+core.register_craftitem("flying_sausage:cooked_elytra", {
     description = "Cooked Elytra\nWeirdly delicious.",
     wield_image = "mcl_armor_inv_elytra.png^[multiply:#551100",
     inventory_image = "mcl_armor_inv_elytra.png^[multiply:#551100",
-    on_place = minetest.item_eat(9999999), -- why not?
-    on_secondary_use = minetest.item_eat(9999999),
+    on_place = core.item_eat(9999999), -- why not?
+    on_secondary_use = core.item_eat(9999999),
     _mcl_saturation = 9999999,
 	groups = {smoker_cookable = 1, campfire_cookable = 1}
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "flying_sausage:cooked_elytra",
     type = "cooking",
     recipe = "mcl_armor:elytra",
     cooktime = 160,
 })
 
-minetest.register_craftitem("flying_sausage:burnt_elytra", {
+core.register_craftitem("flying_sausage:burnt_elytra", {
     description = "Burnt Elytra\nWeirdly delicious.",
     wield_image = "mcl_armor_inv_elytra.png^[multiply:#000000",
     inventory_image = "mcl_armor_inv_elytra.png^[multiply:#000000",
@@ -33,7 +33,7 @@ minetest.register_craftitem("flying_sausage:burnt_elytra", {
     _mcl_saturation = 99999,
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "flying_sausage:burnt_elytra",
     type = "cooking",
     recipe = "flying_sausage:cooked_elytra",
@@ -57,36 +57,36 @@ end
 why.update_sausage = function(player)
     local sausage, ignore_sausage = why.check_sausage(player)
     if not ignore_sausage then
-        local privs = minetest.get_player_privs(player:get_player_name())
+        local privs = core.get_player_privs(player:get_player_name())
         privs.fly = sausage
-        minetest.set_player_privs(player:get_player_name(), table.copy(privs))
+        core.set_player_privs(player:get_player_name(), table.copy(privs))
     end
 end
 
 -- Automatically set new players who can fly to ignore sausage
-minetest.register_on_newplayer(function(player)
-    if minetest.check_player_privs(player, "fly") then
+core.register_on_newplayer(function(player)
+    if core.check_player_privs(player, "fly") then
         player:get_meta():set_int("flying_sausage_ignore", 1)
     end
 end)
 
-minetest.register_on_joinplayer(function(player, last_login)
+core.register_on_joinplayer(function(player, last_login)
     player:get_inventory():set_size("flying_sausage_flight_stomach", 1)
     why.update_sausage(player)
 end)
 
-minetest.register_chatcommand("ignore_sausage", {
+core.register_chatcommand("ignore_sausage", {
     privs = {privs = true},
     func = function(name, param)
-        local player = minetest.get_player_by_name(name)
+        local player = core.get_player_by_name(name)
         local meta = player:get_meta()
         if meta:get_int("flying_sausage_ignore") == 1 then
             meta:set_int("flying_sausage_ignore", 2)
-            minetest.chat_send_player(name, "Stopped ignoring sausage")
+            core.chat_send_player(name, "Stopped ignoring sausage")
             why.update_sausage(player)
         else
             meta:set_int("flying_sausage_ignore", 1)
-            minetest.chat_send_player(name, "Ignoring sausage")
+            core.chat_send_player(name, "Ignoring sausage")
         end
     end
 })
@@ -96,11 +96,11 @@ Of course, this won't run if the server crashes. In that case, revoke fly manual
 I recommend getting the Snippets mod and pasting this code in:
 
 
-for _, player in pairs(minetest.get_connected_players()) do
+for _, player in pairs(core.get_connected_players()) do
     if player:get_attribute("flying_sausage_ignore") == 2 then
-        local privs = minetest.get_player_privs(player:get_player_name())
+        local privs = core.get_player_privs(player:get_player_name())
         privs.fly = false
-        minetest.set_player_privs(player:get_player_name(), privs)
+        core.set_player_privs(player:get_player_name(), privs)
     end
 end
 
@@ -110,12 +110,12 @@ This will only apply to players that are currently on the server.
 
 ]]
 
-minetest.register_on_leaveplayer(function(player, timed_out)
+core.register_on_leaveplayer(function(player, timed_out)
     local sausage, ignore_sausage = why.check_sausage(player)
     if not ignore_sausage then
-        local privs = minetest.get_player_privs(player:get_player_name())
+        local privs = core.get_player_privs(player:get_player_name())
         privs.fly = false
-        minetest.set_player_privs(player:get_player_name(), privs)
+        core.set_player_privs(player:get_player_name(), privs)
     end
 end)
 
@@ -134,10 +134,10 @@ if why.mcl then
 end
 
 local on_rightclick = function(itemstack, player, pointed_thing)
-    minetest.show_formspec(player:get_player_name(), "flying_sausage_flight_stomach", formspec)
+    core.show_formspec(player:get_player_name(), "flying_sausage_flight_stomach", formspec)
 end
 
-minetest.register_allow_player_inventory_action(function(player, action, inv, info)
+core.register_allow_player_inventory_action(function(player, action, inv, info)
 	if inv:get_location().type == "player"
     and action == "move"
     and (info.from_list == "flying_sausage_flight_stomach" or info.to_list == "flying_sausage_flight_stomach") then
@@ -159,7 +159,7 @@ minetest.register_allow_player_inventory_action(function(player, action, inv, in
 	end
 end)
 
-minetest.register_on_player_inventory_action(function(player, action, inventory, info)
+core.register_on_player_inventory_action(function(player, action, inventory, info)
     if (info.from_list and info.from_list == "flying_sausage_flight_stomach")
     or (info.to_list and info.to_list == "flying_sausage_flight_stomach")
     or (info.list_name and info.listname == "flying_sausage_flight_stomach") then
@@ -167,7 +167,7 @@ minetest.register_on_player_inventory_action(function(player, action, inventory,
     end
 end)
 
-minetest.register_tool("flying_sausage:flight_stomach", {
+core.register_tool("flying_sausage:flight_stomach", {
     description = "Flight Stomach Accessor\nStorage for a Flying Sausage",
     on_secondary_use = on_rightclick,
     on_place = on_rightclick,
@@ -175,7 +175,7 @@ minetest.register_tool("flying_sausage:flight_stomach", {
     inventory_image = "flying_sausage_flight_stomach.png"
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "flying_sausage:flight_stomach",
     type = "shapeless",
     recipe = {"mcl_chests:chest", "meat_blocks:burnt_sausage"}
@@ -186,9 +186,9 @@ local function sausage_function(itemstack, player, pointed_thing)
         -- Call on_rightclick if the pointed node defines it
         if pointed_thing and pointed_thing.type == "node" then
             local pos = pointed_thing.under
-            local node = minetest.get_node(pos)
+            local node = core.get_node(pos)
             if player and not player:get_player_control().sneak then
-                local nodedef = minetest.registered_nodes[node.name]
+                local nodedef = core.registered_nodes[node.name]
                 local on_rightclick = nodedef and nodedef.on_rightclick
                 if on_rightclick then
                     return on_rightclick(pos, node, player, itemstack, pointed_thing) or itemstack
@@ -199,11 +199,11 @@ local function sausage_function(itemstack, player, pointed_thing)
     if awards then
         awards.unlock(player:get_player_name(), "why:wurst")
     end
-    local eat_func = minetest.item_eat(9999999999999999)
+    local eat_func = core.item_eat(9999999999999999)
     return eat_func(itemstack, player, pointed_thing)
 end
 
-minetest.register_tool("flying_sausage:flying_sausage", {
+core.register_tool("flying_sausage:flying_sausage", {
     description = "Flying Sausage\nYes, it looks exactly like a normal cooked sausage.\nDon't get them mixed up.",
     wield_image = "meat_blocks_sausage_cooked.png",
     inventory_image = "meat_blocks_sausage_cooked.png",
@@ -212,7 +212,7 @@ minetest.register_tool("flying_sausage:flying_sausage", {
     _mcl_saturation = 9999999999999999,
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "flying_sausage:flying_sausage",
     recipe = {
         {"meat_blocks:burnt_block_sausage", "meat_blocks:burnt_block_sausage", "meat_blocks:burnt_block_sausage"},

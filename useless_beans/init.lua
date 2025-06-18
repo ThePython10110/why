@@ -9,7 +9,7 @@ end
 
 ---------------------USELESS BEANS, BEANGOTS, AND BLOCKS-----------------------------------
 
-minetest.register_node("useless_beans:useless_bean", {
+core.register_node("useless_beans:useless_bean", {
     description = "Useless Bean",
     drawtype = "plantlike",
     tiles = {"useless_beans_useless_bean.png"},
@@ -21,7 +21,7 @@ minetest.register_node("useless_beans:useless_bean", {
     walkable = false
 })
 
-minetest.register_decoration({
+core.register_decoration({
     deco_type = "simple",
     place_on = {"group:sand", "group:soil", "mcl_mud:mud"},
     sidelen = 16,
@@ -39,20 +39,20 @@ minetest.register_decoration({
     height = 1,
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useless_beans:useless_bean 64",
     type = "shapeless",
     recipe = {"useless_beans:useless_bean"}
 })
 
-minetest.register_node("useless_beans:useless_bean_block", {
+core.register_node("useless_beans:useless_bean_block", {
     description = "Useless Bean Block",
     tiles = {"useless_beans_useless_bean_block.png"},
 	sounds = why.sound_mod.node_sound_leaves_default,
     groups = {useless = 1, dig_immediate = 3, plant = 1, deco_block = 1, bouncy = 150, fall_damage_add_percent = -100},
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useless_beans:useless_bean_block",
     recipe = {
         {"useless_beans:useless_bean", "useless_beans:useless_bean", "useless_beans:useless_bean"},
@@ -61,27 +61,27 @@ minetest.register_craft({
     }
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useless_beans:useless_bean 10",
     type = "shapeless",
     recipe = {"useless_beans:useless_bean_block"}
 })
 
-minetest.register_craftitem("useless_beans:useless_bean_ingot", {
+core.register_craftitem("useless_beans:useless_bean_ingot", {
     description = "Beangot (Useless Bean Ingot)",
 	inventory_image = "useless_beans_useless_bean_ingot.png",
 	wield_image = "useless_beans_useless_bean_ingot.png",
     groups = {useless = 1,}
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useless_beans:useless_bean_ingot",
     type = "cooking",
     recipe = "useless_beans:useless_bean",
     time = 20
 })
 
-minetest.register_node("useless_beans:useless_bean_ingot_block", {
+core.register_node("useless_beans:useless_bean_ingot_block", {
     description = "Beangot Block",
     tiles = {"useless_beans_useless_bean_ingot_block.png"},
 	sounds = why.sound_mod.node_sound_metal_default,
@@ -90,7 +90,7 @@ minetest.register_node("useless_beans:useless_bean_ingot_block", {
 	_mcl_hardness = 3,
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useless_beans:useless_bean_ingot_block",
     recipe = {
         {"useless_beans:useless_bean_ingot", "useless_beans:useless_bean_ingot", "useless_beans:useless_bean_ingot"},
@@ -99,7 +99,7 @@ minetest.register_craft({
     }
 })
 
-minetest.register_node("useless_beans:useless_bean_gold", {
+core.register_node("useless_beans:useless_bean_gold", {
     description = "Golden Useless Bean",
     drawtype = "plantlike",
     tiles = {"useless_beans_useless_bean_gold.png"},
@@ -110,7 +110,7 @@ minetest.register_node("useless_beans:useless_bean_gold", {
     walkable = false
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useless_beans:useless_bean_gold",
     recipe = {
         {gold_itemstring, gold_itemstring, gold_itemstring},
@@ -120,7 +120,7 @@ minetest.register_craft({
 })
 
 if why.mcl then
-    minetest.register_node("useless_beans:useless_bean_gold_enchanted", {
+    core.register_node("useless_beans:useless_bean_gold_enchanted", {
         description = "Enchanted Golden Useless Bean",
         drawtype = "plantlike",
         tiles = {"useless_beans_useless_bean_gold.png" .. mcl_enchanting.overlay},
@@ -131,7 +131,7 @@ if why.mcl then
         walkable = false
     })
 
-    minetest.register_craft({
+    core.register_craft({
         output = "useless_beans:useless_bean_gold_enchanted",
         recipe = {
             {"mcl_core:gold_nugget", "mcl_core:gold_nugget", "mcl_core:gold_nugget"},
@@ -160,13 +160,13 @@ end
 
 local USE_TEXTURE_ALPHA = true
 
-if minetest.features.use_texture_alpha_string_modes then
+if core.features.use_texture_alpha_string_modes then
 	USE_TEXTURE_ALPHA = "blend"
 end
 
 local WATER_VISC = 1
 
-minetest.register_node("useless_beans:useless_bean_liquid_flowing", {
+core.register_node("useless_beans:useless_bean_liquid_flowing", {
 	description = "Flowing Useless Bean Liquid",
 	_doc_items_create_entry = false,
 	wield_image = "useless_beans_water_flowing_animated.png^[verticalframe:64:0",
@@ -209,7 +209,7 @@ minetest.register_node("useless_beans:useless_bean_liquid_flowing", {
 	_mcl_hardness = -1,
 })
 
-minetest.register_node("useless_beans:useless_bean_liquid_source", {
+core.register_node("useless_beans:useless_bean_liquid_source", {
 	description = "Useless Bean Liquid Source",
 	_doc_items_entry_name = "Useless Bean Liquid",
 	_doc_items_longdesc =
@@ -273,14 +273,14 @@ else
 		"useless_beans:bucket_useless_bean_liquid", "useless_beans_bucket_useless_bean_liquid.png", "Useless Bean Liquid Bucket")
 end
 
-minetest.register_craft({
+core.register_craft({
     output = "useless_beans:bucket_useless_bean_liquid",
     type = "shapeless",
     recipe = {"useless_beans:useless_bean", water_itemstring}
 })
 
 ---------------------USELESS BEAN TOOLS/ARMOR------------------------
-if why.mcl or minetest.get_modpath("3d_armor") then
+if why.mcl or core.get_modpath("3d_armor") then
     if why.mcl then
         mcl_armor.register_set({
             name = "useless_bean",
@@ -315,14 +315,14 @@ if why.mcl or minetest.get_modpath("3d_armor") then
             })
         end
         local b = "useless_beans:useless_bean"
-        minetest.register_craft({
+        core.register_craft({
             output = "useless_beans:helmet_useless_bean",
             recipe = {
                 {b, b, b},
                 {b, "",b},
             }
         })
-        minetest.register_craft({
+        core.register_craft({
             output = "useless_beans:chestplate_useless_bean",
             recipe = {
                 {b, "",b},
@@ -330,7 +330,7 @@ if why.mcl or minetest.get_modpath("3d_armor") then
                 {b, b, b},
             }
         })
-        minetest.register_craft({
+        core.register_craft({
             output = "useless_beans:leggings_useless_bean",
             recipe = {
                 {b, b, b},
@@ -338,7 +338,7 @@ if why.mcl or minetest.get_modpath("3d_armor") then
                 {b, "",b},
             }
         })
-        minetest.register_craft({
+        core.register_craft({
             output = "useless_beans:boots_useless_bean",
             recipe = {
                 {b, "",b},
@@ -376,9 +376,9 @@ if why.mcl or minetest.get_modpath("3d_armor") then
         bean_helmet_base_def.on_unequip = remove_bean_hud
     end
 
-    minetest.override_item("useless_beans:helmet_useless_bean", bean_helmet_base_def)
+    core.override_item("useless_beans:helmet_useless_bean", bean_helmet_base_def)
 
-    minetest.register_on_joinplayer(function(player)
+    core.register_on_joinplayer(function(player)
         if why.mcl then
             if player:get_inventory():get_stack("armor", 2):get_name() == "useless_beans:helmet_useless_bean" then
                 add_bean_hud(player)
@@ -395,24 +395,24 @@ if why.mcl or minetest.get_modpath("3d_armor") then
             end
         end
     end)
-    minetest.register_on_dieplayer(function(player)
+    core.register_on_dieplayer(function(player)
         if why.mcl then
-            if not minetest.settings:get_bool("mcl_keepInventory") then
+            if not core.settings:get_bool("mcl_keepInventory") then
                 remove_bean_hud(player)
             end
         else
-            if minetest.settings:get("bones_mode") ~= "keep" then
+            if core.settings:get("bones_mode") ~= "keep" then
                 remove_bean_hud(player)
             end
         end
     end)
-    minetest.register_on_leaveplayer(function(player)
+    core.register_on_leaveplayer(function(player)
         bean_hud[player] = nil
     end)
 end
 
 for name, long_name in pairs({pick = "Pickaxe", axe = "Axe", hoe = "Hoe", sword = "Sword", shovel = "Shovel"}) do
-    minetest.register_tool("useless_beans:"..name.."_useless_bean", {
+    core.register_tool("useless_beans:"..name.."_useless_bean", {
         description = "Useless Bean "..long_name,
         on_use = function() end,
         on_secondary_use = function() end,
@@ -423,7 +423,7 @@ for name, long_name in pairs({pick = "Pickaxe", axe = "Axe", hoe = "Hoe", sword 
     })
 end
 
-minetest.register_craft({
+core.register_craft({
     output = "useless_beans:pick_useless_bean",
     recipe = {
         {"useless_bean:useless_bean", "useless_bean:useless_bean", "useless_bean:useless_bean"},
@@ -432,7 +432,7 @@ minetest.register_craft({
     }
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useless_beans:axe_useless_bean",
     recipe = {
         {"useless_bean:useless_bean", "useless_bean:useless_bean", ""},
@@ -441,7 +441,7 @@ minetest.register_craft({
     }
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useless_beans:hoe_useless_bean",
     recipe = {
         {"useless_bean:useless_bean", "useless_bean:useless_bean", ""},
@@ -450,7 +450,7 @@ minetest.register_craft({
     }
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useless_beans:shovel_useless_bean",
     recipe = {
         {"", "useless_bean:useless_bean", ""},
@@ -459,7 +459,7 @@ minetest.register_craft({
     }
 })
 
-minetest.register_craft({
+core.register_craft({
     output = "useless_beans:sword_useless_bean",
     recipe = {
         {"", "useless_bean:useless_bean", ""},

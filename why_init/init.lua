@@ -1,7 +1,7 @@
 why = {}
 
-why.mcl = minetest.get_modpath("mcl_core")
-why.mcla = minetest.get_game_info().id == "mineclonia"
+why.mcl = core.get_modpath("mcl_core")
+why.mcla = core.get_game_info().id == "mineclonia"
 why.mcl2 = why.mcl and not why.mcla
 
 -- All Why mods that add items/nodes should be in this list.
@@ -45,15 +45,15 @@ if why.mcl2 then
     end
     mcl_item_id.set_mod_namespace("ghost_blocks")
 else
-    minetest.register_on_mods_loaded(function()
-        for name, def in pairs(minetest.registered_items) do
+    core.register_on_mods_loaded(function()
+        for name, def in pairs(core.registered_items) do
             for _, mod in ipairs(mod_list) do
                 if name:sub(1,#mod) == mod then
-                    minetest.register_alias("why:"..name:sub(#mod+2, -1), name)
+                    core.register_alias("why:"..name:sub(#mod+2, -1), name)
                 end
             end
         end
     end)
 end
 
-minetest.register_alias("why:ghostifier", "ghost_blocks:ghostifier")
+core.register_alias("why:ghostifier", "ghost_blocks:ghostifier")

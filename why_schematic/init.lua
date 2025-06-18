@@ -1,4 +1,4 @@
-minetest.register_decoration({
+core.register_decoration({
     deco_type = "schematic",
     place_on = {"group:sand", "group:soil", "mcl_mud:mud"},
     sidelen = 16,
@@ -12,7 +12,7 @@ minetest.register_decoration({
     },
     y_min = -1,
     y_max = 30000,
-    schematic = minetest.get_modpath("why_schematic").."/why.mts",
+    schematic = core.get_modpath("why_schematic").."/why.mts",
     rotation = "random",
     height = 1,
     flags = "all_floors, liquid_surface, force_placement"
